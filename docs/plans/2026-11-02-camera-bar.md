@@ -15,7 +15,7 @@
 - Tasks 2–3 will use one native-app implementation agent because app, player, extension, and Xcode targets share build configuration. Both sets of acceptance checks remain required.
 - Tasks 2–3 in progress with native-app agent; Task 4 pending.
 - Compaction count: 0.
-- No signing identity available; local widget loading must be checked.
+- No signing identity available. Doctor Biz explicitly chose "build locally and document the signing step". Verify extension packaging; signed desktop activation is a documented user setup step, not a completion claim.
 - Native desktop-control inventory failed with `Sky Computer Use native pipe startup failed`; retry after build and use Xcode UI testing for repeatable app checks.
 
 ## Task 1: Camera model and snapshot storage
