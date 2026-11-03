@@ -12,11 +12,27 @@
 
 - Design approved. Repository initialized on `wip/camera-bar`.
 - Task 1 complete in `01f70ac`: 18 tests pass, format clean; independent spec and quality reviews approved.
-- Tasks 2–3 will use one native-app implementation agent because app, player, extension, and Xcode targets share build configuration. Both sets of acceptance checks remain required.
-- Tasks 2–3 in progress with native-app agent; Task 4 pending.
-- Compaction count: 0.
+- Tasks 2–3 complete in `0a7b6af`: native app, RTSP player, native widget extension, and real integration/UI tests. Independent spec and quality reviews approved.
+- Task 4 complete in `da652f4`: reproducible dependency bootstrap, build, real RTSP fixture, canonical check, and signing instructions. Final verification passed; details below.
+- Compaction count: 1.
 - No signing identity available. Doctor Biz explicitly chose "build locally and document the signing step". Verify extension packaging; signed desktop activation is a documented user setup step, not a completion claim.
-- Native desktop-control inventory failed with `Sky Computer Use native pipe startup failed`; retry after build and use Xcode UI testing for repeatable app checks.
+- Native desktop-control inventory failed twice with `Sky Computer Use native pipe startup failed`; real XCTest UI testing provides repeatable app checks and popover screenshots.
+
+## Delivery verification
+
+- `scripts/check` exited 0 on 2026-11-02: strict Swift formatting, shell syntax, 18 core tests, 14 native/RTSP tests, one complete UI lifecycle test, and local app/extension build.
+- Final XCTest result bundles report no failures, skips, or runtime warnings. The installed Xcode emits the host/service diagnostics documented in README; final native, UI, and build logs contain no compiler warnings.
+- Native tests decode real H.264 RTSP streams at 10 fps, 1 fps, and warmed 0.25 fps. They cover image pixels, cancellation, rapid switching, bounded offline failure, snapshot retention, real Keychain/files, and background/live lifetime.
+- Actual UI automation covers add/select/edit/remove, live viewing, selection persistence, cold widget-link launch, offline state, and retry control. Inspected the captured viewer and real decoded frame visually. A deliberate failure separately proved test-owned catalog and Keychain cleanup; final catalog is empty and the fixture listener stopped.
+- Independently verified the finished app with `codesign --verify --deep --strict`. The embedded extension has the WidgetKit extension identifier and matching App Group entitlements/settings. This verifies local packaging, not signed desktop activation.
+- Final logs: `.build/final-check-run.log`, `.build/check-*.log`, `.build/service-tests.log`, `.build/ui-tests.log`, and `.build/app-build.log`. Final result bundles end in `Test-CameraBarServices-2026.11.02_21-21-05--0600.xcresult` and `Test-CameraBarUI-2026.11.02_21-22-22--0600.xcresult` under `.build/xcode/Logs/Test/`.
+- Built app: `.build/xcode/Build/Products/Debug/CameraBar.app`. Leave the committed work on `wip/camera-bar`; no merge or remote publication requested.
+
+## Remaining setup and limits
+
+- Release blocker: native desktop widget activation still requires a real Apple signing team and matching registered App Group. Doctor Biz explicitly accepted local delivery with these steps documented in README. Sign and verify the desktop widget before distribution.
+- Moderate compatibility limit: cameras whose initial decoding exceeds the roughly 15-second acquisition deadline can time out. Low-frame-rate capture is tested, but the warmed sparse-stream test does not prove cold startup within that deadline. No physical camera was provided; validation used real local RTSP streams.
+- WidgetKit controls refresh timing; Camera Bar requests fresh snapshots about every five minutes while running. It is not a live-video widget.
 
 ## Task 1: Camera model and snapshot storage
 
