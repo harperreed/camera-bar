@@ -1,0 +1,26 @@
+#!/bin/bash
+# ABOUTME: Downloads the pinned stable VLCKit binary and verifies its archive hash.
+# ABOUTME: Regenerates the native Xcode project with XcodeGen.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+if [[ "${1:-}" == --help ]]; then
+  echo 'Usage: scripts/bootstrap'
+  echo 'Requires XcodeGen and curl. Downloads verified VLCKit 3.7.3 into ignored Vendor/.'
+  exit 0
+fi
+command -v xcodegen >/dev/null || { echo 'Install XcodeGen (brew install xcodegen), then rerun.' >&2; exit 1; }
+archive=.build/dependencies/VLCKit-3.7.3.tar.xz
+framework='Vendor/VLCKit - binary package/VLCKit.xcframework'
+checksum=019afdae4e2e2d0f3ac325fac8f7ba0af25dca70b9d157df7d60db88e0be8e5d
+if [[ ! -d "$framework" ]]; then
+  mkdir -p .build/dependencies Vendor
+  if [[ ! -f "$archive" ]]; then
+    curl --fail --location --retry 3 'https://download.videolan.org/cocoapods/prod/VLCKit-3.7.3-319ed2c0-79128878.tar.xz' --output "$archive.partial"
+    mv "$archive.partial" "$archive"
+  fi
+  actual=$(shasum -a 256 "$archive" | awk '{print $1}')
+  [[ "$actual" == "$checksum" ]] || { echo "VLCKit checksum mismatch: $archive. Remove it and retry." >&2; exit 1; }
+  tar -xJf "$archive" -C Vendor
+fi
+xcodegen generate
+echo 'Dependencies and Xcode project are ready.'

@@ -1,0 +1,43 @@
+#!/bin/bash
+# ABOUTME: Builds a runnable local app and embedded widget with ad hoc signing.
+# ABOUTME: Keeps build logs in .build and supports normal development-team signing.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+if [[ "${1:-}" == --help ]]; then
+  echo 'Usage: scripts/build [--signed] [xcodebuild settings...]'
+  echo 'Default: local ad hoc signing. For a registered Apple development team:'
+  echo '  scripts/build --signed DEVELOPMENT_TEAM=YOUR_TEAM_ID'
+  exit 0
+fi
+local_sign=true
+signing=(CODE_SIGNING_ALLOWED=NO)
+if [[ "${1:-}" == --signed ]]; then local_sign=false; signing=(); shift; fi
+mkdir -p .build
+scripts/bootstrap > .build/bootstrap.log 2>&1 || { cat .build/bootstrap.log >&2; exit 1; }
+host_arch=$(uname -m)
+if ! xcodebuild -project CameraBar.xcodeproj -scheme CameraBar -destination "platform=macOS,arch=$host_arch" -derivedDataPath .build/xcode "${signing[@]}" build "$@" > .build/app-build.log 2>&1; then
+  tail -60 .build/app-build.log >&2
+  echo 'Build failed. Full log: .build/app-build.log' >&2
+  exit 1
+fi
+app=.build/xcode/Build/Products/Debug/CameraBar.app
+sign() {
+  if ! codesign "$@" >> .build/app-build.log 2>&1; then
+    tail -20 .build/app-build.log >&2
+    echo 'Code signing failed. Full log: .build/app-build.log' >&2
+    exit 1
+  fi
+}
+if [[ "$local_sign" == true ]]; then
+  group=$(/usr/libexec/PlistBuddy -c 'Print :CameraBarAppGroup' "$app/Contents/Info.plist")
+  for target in CameraBar CameraBarWidget; do
+    cp "$target/$target.entitlements" ".build/$target.local.entitlements"
+    /usr/libexec/PlistBuddy -c "Set :com.apple.security.application-groups:0 $group" ".build/$target.local.entitlements"
+  done
+  # Xcode strips development headers during embedding, invalidating the vendor resource seal.
+  sign --force --sign - "$app/Contents/Frameworks/VLCKit.framework"
+  sign --force --sign - --entitlements .build/CameraBarWidget.local.entitlements "$app/Contents/PlugIns/CameraBarWidget.appex"
+  sign --force --sign - --entitlements .build/CameraBar.local.entitlements "$app"
+  sign --verify --deep --strict "$app"
+fi
+echo "Built: $PWD/$app"

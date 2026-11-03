@@ -1,0 +1,39 @@
+#!/bin/bash
+# ABOUTME: Runs Camera Bar's complete formatting, core, native, RTSP, and UI checks.
+# ABOUTME: Preserves logs in .build and finishes with a runnable local app bundle.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+if [[ "${1:-}" == --help ]]; then
+  echo 'Usage: scripts/check'
+  echo 'Requires Xcode, XcodeGen, ffmpeg, mediamtx, and a logged-in desktop for real UI tests.'
+  echo 'Runs all checks; failures point to full logs under .build/.'
+  exit 0
+fi
+mkdir -p .build
+run() {
+  name=$1
+  shift
+  echo "Checking ${name}..."
+  if ! "$@" > ".build/check-$name.log" 2>&1; then
+    tail -60 ".build/check-$name.log" >&2
+    echo "Check failed: $name. Full log: .build/check-$name.log" >&2
+    exit 1
+  fi
+}
+check_shell() {
+  for script in scripts/bootstrap scripts/build scripts/check scripts/test-rtsp; do
+    bash -n "$script" || return
+  done
+}
+run bootstrap scripts/bootstrap
+run format swift format lint --strict --recursive Package.swift Sources Tests CameraBar CameraBarTests CameraBarUITests CameraBarWidget Shared
+run shell check_shell
+run core swift test
+run native scripts/test-rtsp
+cp .build/native-tests.log .build/service-tests.log
+run ui scripts/test-rtsp --ui
+cp .build/native-tests.log .build/ui-tests.log
+run build scripts/build
+echo 'All checks passed. App: .build/xcode/Build/Products/Debug/CameraBar.app'
+echo 'Full logs: .build/check-*.log, .build/service-tests.log, .build/ui-tests.log, .build/app-build.log'
+echo 'Native widget desktop activation still requires your development signing and App Group setup.'

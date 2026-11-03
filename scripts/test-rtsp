@@ -1,0 +1,79 @@
+#!/bin/bash
+# ABOUTME: Runs native integration tests against a real local RTSP test pattern.
+# ABOUTME: Owns only its fixture processes and keeps diagnostic logs in .build.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+if [[ "${1:-}" == --help ]]; then
+  echo 'Usage: scripts/test-rtsp [--ui | --serve] [xcodebuild test arguments...]'
+  echo 'Requires mediamtx and ffmpeg; reserves localhost:18554 for this run.'
+  exit 0
+fi
+scheme=CameraBarServices
+serve=false
+if [[ "${1:-}" == --ui ]]; then scheme=CameraBarUI; shift; fi
+if [[ "${1:-}" == --serve ]]; then serve=true; shift; fi
+mkdir -p .build/rtsp
+if lsof -nP -iTCP:18554 -sTCP:LISTEN > .build/rtsp/port.log 2>&1; then
+  echo 'RTSP fixture port 18554 is in use; see .build/rtsp/port.log' >&2
+  exit 1
+fi
+for tool in mediamtx ffmpeg xcodebuild; do command -v "$tool" >/dev/null || { echo "Missing required tool: $tool" >&2; exit 1; }; done
+cat > .build/rtsp/mediamtx.yml <<'CONFIG'
+logLevel: warn
+rtspAddress: 127.0.0.1:18554
+rtspTransports: [tcp]
+rtmp: no
+hls: no
+webrtc: no
+srt: no
+api: no
+metrics: no
+pprof: no
+playback: no
+paths:
+  live:
+  slow:
+  sparse:
+CONFIG
+server_pid=''
+publisher_pid=''
+cleanup() {
+  [[ -z "$publisher_pid" ]] || kill "$publisher_pid" 2>/dev/null || true
+  [[ -z "$server_pid" ]] || kill "$server_pid" 2>/dev/null || true
+  [[ -z "$publisher_pid" ]] || wait "$publisher_pid" 2>/dev/null || true
+  [[ -z "$server_pid" ]] || wait "$server_pid" 2>/dev/null || true
+}
+trap cleanup EXIT INT TERM
+(cd .build/rtsp && exec mediamtx mediamtx.yml) > .build/rtsp/server.log 2>&1 &
+server_pid=$!
+for attempt in {1..30}; do
+  kill -0 "$server_pid" 2>/dev/null || { cat .build/rtsp/server.log >&2; exit 1; }
+  if nc -z 127.0.0.1 18554 2>/dev/null; then break; fi
+  sleep 0.1
+done
+encoder_args=(-c:v libx264 -preset ultrafast -tune zerolatency -pix_fmt yuv420p)
+output_args=(-f rtsp -rtsp_transport tcp)
+ffmpeg -nostdin -hide_banner -loglevel error -re -f lavfi -i 'testsrc2=size=640x360:rate=10' \
+  -map 0:v "${encoder_args[@]}" -g 10 "${output_args[@]}" rtsp://127.0.0.1:18554/live \
+  -map 0:v -vf fps=1 "${encoder_args[@]}" -g 1 "${output_args[@]}" rtsp://127.0.0.1:18554/slow \
+  -map 0:v -vf fps=0.25 "${encoder_args[@]}" -g 1 "${output_args[@]}" rtsp://127.0.0.1:18554/sparse \
+  > .build/rtsp/publisher.log 2>&1 &
+publisher_pid=$!
+sleep 1
+kill -0 "$publisher_pid" 2>/dev/null || { cat .build/rtsp/publisher.log >&2; exit 1; }
+if [[ "$serve" == true ]]; then
+  echo 'RTSP fixture ready: rtsp://127.0.0.1:18554/live (Ctrl-C to stop)'
+  wait "$server_pid"
+  exit 0
+fi
+host_arch=$(uname -m)
+if ! xcodebuild -project CameraBar.xcodeproj -scheme "$scheme" -destination "platform=macOS,arch=$host_arch" -derivedDataPath .build/xcode CODE_SIGNING_ALLOWED=NO test "$@" > .build/native-tests.log 2>&1; then
+  tail -70 .build/native-tests.log >&2
+  echo 'Native test failure. Full log: .build/native-tests.log; fixture logs: .build/rtsp/' >&2
+  exit 1
+fi
+if rg 'Sending request:|Received a complete|log-redaction-probe|camera-bar-password' .build/native-tests.log > .build/rtsp/privacy-failure.log; then
+  echo 'RTSP address logging detected. Inspect .build/rtsp/privacy-failure.log locally.' >&2
+  exit 1
+fi
+echo "$scheme tests passed. Log: .build/native-tests.log"
