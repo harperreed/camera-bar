@@ -1,0 +1,103 @@
+# ABOUTME: Defines the macOS menu bar app, widget, and native test targets.
+# ABOUTME: Regenerate CameraBar.xcodeproj with xcodegen generate.
+name: CameraBar
+options:
+  deploymentTarget:
+    macOS: '14.0'
+settings:
+  base:
+    SWIFT_VERSION: '5.0'
+    MACOSX_DEPLOYMENT_TARGET: '14.0'
+    CODE_SIGN_STYLE: Automatic
+    CAMERA_BAR_APP_GROUP: group.com.harper.camera-bar
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+packages:
+  CameraBarCore:
+    path: .
+targets:
+  CameraBar:
+    type: application
+    platform: macOS
+    sources:
+      - CameraBar
+      - Shared
+      - path: THIRD_PARTY_NOTICES.txt
+        buildPhase: resources
+    dependencies:
+      - package: CameraBarCore
+      - framework: Vendor/VLCKit - binary package/VLCKit.xcframework
+        embed: true
+      - target: CameraBarWidget
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.harper.camera-bar
+        SWIFT_OBJC_BRIDGING_HEADER: CameraBar/CameraBar-Bridging-Header.h
+        HEADER_SEARCH_PATHS: ["$(inherited)", "$(BUILT_PRODUCTS_DIR)/VLCKit.framework/Headers"]
+        INFOPLIST_FILE: CameraBar/Info.plist
+        CODE_SIGN_ENTITLEMENTS: CameraBar/CameraBar.entitlements
+        LD_RUNPATH_SEARCH_PATHS: '$(inherited) @executable_path/../Frameworks'
+  CameraBarWidget:
+    type: app-extension
+    platform: macOS
+    sources: [CameraBarWidget, Shared]
+    dependencies:
+      - package: CameraBarCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.harper.camera-bar.widget
+        INFOPLIST_FILE: CameraBarWidget/Info.plist
+        CODE_SIGN_ENTITLEMENTS: CameraBarWidget/CameraBarWidget.entitlements
+        SKIP_INSTALL: YES
+  CameraBarTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - CameraBarTests
+      - path: CameraBar
+        excludes: [CameraBarApp.swift, Views.swift, Info.plist, CameraBar.entitlements]
+      - Shared
+    dependencies:
+      - package: CameraBarCore
+      - framework: Vendor/VLCKit - binary package/VLCKit.xcframework
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.harper.camera-bar.tests
+        SWIFT_OBJC_BRIDGING_HEADER: CameraBar/CameraBar-Bridging-Header.h
+        HEADER_SEARCH_PATHS: ["$(inherited)", "$(BUILT_PRODUCTS_DIR)/VLCKit.framework/Headers"]
+        GENERATE_INFOPLIST_FILE: YES
+        LD_RUNPATH_SEARCH_PATHS: '$(inherited) @loader_path/../Frameworks'
+  CameraBarUITests:
+    type: bundle.ui-testing
+    platform: macOS
+    sources:
+      - CameraBarUITests
+    dependencies:
+      - target: CameraBar
+      - package: CameraBarCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.harper.camera-bar.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: CameraBar
+schemes:
+  CameraBar:
+    build:
+      targets:
+        CameraBar: all
+        CameraBarTests: [test]
+    test:
+      targets: [CameraBarTests]
+  CameraBarServices:
+    build:
+      targets:
+        CameraBarTests: all
+    test:
+      targets: [CameraBarTests]
+  CameraBarUI:
+    build:
+      targets:
+        CameraBar: all
+        CameraBarUITests: [test]
+    test:
+      targets: [CameraBarUITests]

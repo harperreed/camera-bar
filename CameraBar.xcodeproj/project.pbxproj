@@ -1,0 +1,822 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		12BC44C8BBADB0F8E7825E8A /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2883E5496393E470234F8377 /* AppController.swift */; };
+		2633B3B1FD991A7B04FBBB90 /* CameraBarCore in Frameworks */ = {isa = PBXBuildFile; productRef = C40EF52C1D41BE9CDED05BFD /* CameraBarCore */; };
+		315E167283B9920267EBE85D /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BB67C31A64251018594F61 /* ServiceTests.swift */; };
+		3BC23042E120B43B49620E0D /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2883E5496393E470234F8377 /* AppController.swift */; };
+		3F04836C4E31A175434BDFDE /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39B7836E9F1724E6C85436B /* WidgetSnapshot.swift */; };
+		424C746E848DD361A36E0F61 /* CameraBarCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9D13FC4231F35D555678BAEB /* CameraBarCore */; };
+		4FEC4B3988F521E8C7D3B816 /* PlaybackEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B30114FBFB6C0BBC9DCB04 /* PlaybackEngine.swift */; };
+		50DF1F1F68E2527CD8651939 /* CameraBarWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3729A6C0D6C4E72BA073874B /* CameraBarWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		51CBF27E6FA48F7F570951B8 /* CameraState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2223F9052422DD03E178B88B /* CameraState.swift */; };
+		57504DDDF2AE4107DC358025 /* SnapshotBoundary.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8E946FD95FBC7359885831 /* SnapshotBoundary.m */; };
+		5B149B4FF4F26335E37E15BA /* PlaybackEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B30114FBFB6C0BBC9DCB04 /* PlaybackEngine.swift */; };
+		67D55382F4421CF93A640C9C /* VLCKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8E54EE927FE36940740F4D /* VLCKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6C64C984D7367E8E74004E9A /* PlaybackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCA014DDC823FEB95C6EA13 /* PlaybackTests.swift */; };
+		6DD605104CC215CA516300F0 /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39B7836E9F1724E6C85436B /* WidgetSnapshot.swift */; };
+		7930A8DC4758DB29D2A9287A /* CameraBarCore in Frameworks */ = {isa = PBXBuildFile; productRef = F17E15668393380E9F28BAD1 /* CameraBarCore */; };
+		7A7D70E890C862D2969C2439 /* CameraState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2223F9052422DD03E178B88B /* CameraState.swift */; };
+		7E5706353F3BDB9D957D63E9 /* CredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34214794A3BE8AD443B33D /* CredentialStore.swift */; };
+		81606835539195C61887AE4C /* VLCKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8E54EE927FE36940740F4D /* VLCKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8D7E59D5C70B7435C6817288 /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39B7836E9F1724E6C85436B /* WidgetSnapshot.swift */; };
+		9B1BAA7CC48B39E10C197B8F /* SnapshotBoundary.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8E946FD95FBC7359885831 /* SnapshotBoundary.m */; };
+		A136033D27A754650088AC2D /* CameraBarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D07559B7DCFD55D5A679A3 /* CameraBarApp.swift */; };
+		B5351FCA3D7807E5ACB438A8 /* CameraBarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0FBFC40E467761482B448B /* CameraBarUITests.swift */; };
+		B61255BD7F9D8064E00C4729 /* THIRD_PARTY_NOTICES.txt in Resources */ = {isa = PBXBuildFile; fileRef = C2D45F80835C502E688DCC8A /* THIRD_PARTY_NOTICES.txt */; };
+		B6C85A3A5A444D7335438D9A /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19C94DE61CE26F80D9B8089 /* Views.swift */; };
+		C9C6A45415EA781FE40C30D1 /* CameraBarWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2C7A6FDF00E9E946F972F4 /* CameraBarWidget.swift */; };
+		CB0BCD90DC951AA6FE01C6D6 /* CredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34214794A3BE8AD443B33D /* CredentialStore.swift */; };
+		D70904C174FD7A7AF214E573 /* CameraBarCore in Frameworks */ = {isa = PBXBuildFile; productRef = A6FDA039BAD81F3C6945986B /* CameraBarCore */; };
+		D79C88A1C4120C9F6ED13F90 /* VLCKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8E54EE927FE36940740F4D /* VLCKit.xcframework */; };
+		E25DE5C7FA6C69A05DD35F89 /* VLCKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8E54EE927FE36940740F4D /* VLCKit.xcframework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		14F5722751F78700E60C4839 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49F8FB7C41F72B2DC8A32C79 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB53ECE89F9BE05604B0F392;
+			remoteInfo = CameraBarWidget;
+		};
+		D4BF9AC353631E4E16C25101 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49F8FB7C41F72B2DC8A32C79 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 024A92200F2BB20BCD9D168F;
+			remoteInfo = CameraBar;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3AEF181BEDFC937371EC7050 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				81606835539195C61887AE4C /* VLCKit.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1D92C55B85EA295E85A394E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				67D55382F4421CF93A640C9C /* VLCKit.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DB67448F8A288AFEEDD7CAF1 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				50DF1F1F68E2527CD8651939 /* CameraBarWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		12B30114FBFB6C0BBC9DCB04 /* PlaybackEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackEngine.swift; sourceTree = "<group>"; };
+		17BB67C31A64251018594F61 /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
+		1D0FBFC40E467761482B448B /* CameraBarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraBarUITests.swift; sourceTree = "<group>"; };
+		2223F9052422DD03E178B88B /* CameraState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraState.swift; sourceTree = "<group>"; };
+		2588581F30BA2E3F3D35C99F /* CameraBar-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CameraBar-Bridging-Header.h"; sourceTree = "<group>"; };
+		2883E5496393E470234F8377 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
+		2A44FF056595C1A0012A793B /* CameraBarWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CameraBarWidget.entitlements; sourceTree = "<group>"; };
+		3729A6C0D6C4E72BA073874B /* CameraBarWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CameraBarWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		39D07559B7DCFD55D5A679A3 /* CameraBarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraBarApp.swift; sourceTree = "<group>"; };
+		4337B6A6A85756A1A9B4E689 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		6A2C2D2428223F4FD57FFAE2 /* CameraBarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CameraBarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C8E54EE927FE36940740F4D /* VLCKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VLCKit.xcframework; path = "Vendor/VLCKit - binary package/VLCKit.xcframework"; sourceTree = "<group>"; };
+		928B317AC702EF56790DC92A /* SnapshotBoundary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SnapshotBoundary.h; sourceTree = "<group>"; };
+		C2D45F80835C502E688DCC8A /* THIRD_PARTY_NOTICES.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = THIRD_PARTY_NOTICES.txt; sourceTree = "<group>"; };
+		CAEFFE9B72C96B278393A9EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		CB2C7A6FDF00E9E946F972F4 /* CameraBarWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraBarWidget.swift; sourceTree = "<group>"; };
+		CE32066C05419EC21B9B5013 /* camera-bar */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "camera-bar"; path = .; sourceTree = SOURCE_ROOT; };
+		CE8E946FD95FBC7359885831 /* SnapshotBoundary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SnapshotBoundary.m; sourceTree = "<group>"; };
+		DD34214794A3BE8AD443B33D /* CredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialStore.swift; sourceTree = "<group>"; };
+		E2FA7ABD716DC63BC1CEBFA3 /* CameraBar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CameraBar.entitlements; sourceTree = "<group>"; };
+		E39B7836E9F1724E6C85436B /* WidgetSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSnapshot.swift; sourceTree = "<group>"; };
+		EE6163E9394ED1B671C3962E /* CameraBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EFCA014DDC823FEB95C6EA13 /* PlaybackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackTests.swift; sourceTree = "<group>"; };
+		EFE89110586AEB4E77005AC5 /* CameraBarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CameraBarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F19C94DE61CE26F80D9B8089 /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2F89014E39974E18A7FD13EC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D70904C174FD7A7AF214E573 /* CameraBarCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		51DE4EFBD3DEAA1F96A8EAC8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				424C746E848DD361A36E0F61 /* CameraBarCore in Frameworks */,
+				E25DE5C7FA6C69A05DD35F89 /* VLCKit.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C2FB40E3E516021D36CEB272 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7930A8DC4758DB29D2A9287A /* CameraBarCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8B64D354C2215A5FF1663CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2633B3B1FD991A7B04FBBB90 /* CameraBarCore in Frameworks */,
+				D79C88A1C4120C9F6ED13F90 /* VLCKit.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		01B1C59F7372D2CC5712D617 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				E39B7836E9F1724E6C85436B /* WidgetSnapshot.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		50F7819141786B61F076A967 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				CE32066C05419EC21B9B5013 /* camera-bar */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		551CAC6EB610863787248BE5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8C8E54EE927FE36940740F4D /* VLCKit.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8978DE21D116CD446657CC9F /* CameraBarUITests */ = {
+			isa = PBXGroup;
+			children = (
+				1D0FBFC40E467761482B448B /* CameraBarUITests.swift */,
+			);
+			path = CameraBarUITests;
+			sourceTree = "<group>";
+		};
+		AF4829A9532B6E00D4C583EE = {
+			isa = PBXGroup;
+			children = (
+				C2D45F80835C502E688DCC8A /* THIRD_PARTY_NOTICES.txt */,
+				CF4C540902F197DEBF880815 /* CameraBar */,
+				B618FC855D5F5679721DE2B7 /* CameraBarTests */,
+				8978DE21D116CD446657CC9F /* CameraBarUITests */,
+				C47997ECE7EB4A8C2A1AD5BA /* CameraBarWidget */,
+				50F7819141786B61F076A967 /* Packages */,
+				01B1C59F7372D2CC5712D617 /* Shared */,
+				551CAC6EB610863787248BE5 /* Frameworks */,
+				F84F62A792EE0A071960A033 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B618FC855D5F5679721DE2B7 /* CameraBarTests */ = {
+			isa = PBXGroup;
+			children = (
+				EFCA014DDC823FEB95C6EA13 /* PlaybackTests.swift */,
+				17BB67C31A64251018594F61 /* ServiceTests.swift */,
+			);
+			path = CameraBarTests;
+			sourceTree = "<group>";
+		};
+		C47997ECE7EB4A8C2A1AD5BA /* CameraBarWidget */ = {
+			isa = PBXGroup;
+			children = (
+				2A44FF056595C1A0012A793B /* CameraBarWidget.entitlements */,
+				CB2C7A6FDF00E9E946F972F4 /* CameraBarWidget.swift */,
+				4337B6A6A85756A1A9B4E689 /* Info.plist */,
+			);
+			path = CameraBarWidget;
+			sourceTree = "<group>";
+		};
+		CF4C540902F197DEBF880815 /* CameraBar */ = {
+			isa = PBXGroup;
+			children = (
+				2883E5496393E470234F8377 /* AppController.swift */,
+				2588581F30BA2E3F3D35C99F /* CameraBar-Bridging-Header.h */,
+				E2FA7ABD716DC63BC1CEBFA3 /* CameraBar.entitlements */,
+				39D07559B7DCFD55D5A679A3 /* CameraBarApp.swift */,
+				2223F9052422DD03E178B88B /* CameraState.swift */,
+				DD34214794A3BE8AD443B33D /* CredentialStore.swift */,
+				CAEFFE9B72C96B278393A9EE /* Info.plist */,
+				12B30114FBFB6C0BBC9DCB04 /* PlaybackEngine.swift */,
+				928B317AC702EF56790DC92A /* SnapshotBoundary.h */,
+				CE8E946FD95FBC7359885831 /* SnapshotBoundary.m */,
+				F19C94DE61CE26F80D9B8089 /* Views.swift */,
+			);
+			path = CameraBar;
+			sourceTree = "<group>";
+		};
+		F84F62A792EE0A071960A033 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EE6163E9394ED1B671C3962E /* CameraBar.app */,
+				EFE89110586AEB4E77005AC5 /* CameraBarTests.xctest */,
+				6A2C2D2428223F4FD57FFAE2 /* CameraBarUITests.xctest */,
+				3729A6C0D6C4E72BA073874B /* CameraBarWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		024A92200F2BB20BCD9D168F /* CameraBar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FDB1D5449A2FD64309C290F /* Build configuration list for PBXNativeTarget "CameraBar" */;
+			buildPhases = (
+				CD19224CF0F1F591F8DBBEF8 /* Sources */,
+				3D3840FC5288E1B4F248B76A /* Resources */,
+				D8B64D354C2215A5FF1663CF /* Frameworks */,
+				DB67448F8A288AFEEDD7CAF1 /* Embed Foundation Extensions */,
+				D1D92C55B85EA295E85A394E /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F79C30D109DB6EB07E9A4D6A /* PBXTargetDependency */,
+			);
+			name = CameraBar;
+			packageProductDependencies = (
+				C40EF52C1D41BE9CDED05BFD /* CameraBarCore */,
+			);
+			productName = CameraBar;
+			productReference = EE6163E9394ED1B671C3962E /* CameraBar.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8C5D90340A6CAC5EE26AFC54 /* CameraBarUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 569DA3E6D1E43887EB589A6F /* Build configuration list for PBXNativeTarget "CameraBarUITests" */;
+			buildPhases = (
+				C68929DA6E91DE6ABD039A47 /* Sources */,
+				C2FB40E3E516021D36CEB272 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6390E0F6D40E9D3357DB37AA /* PBXTargetDependency */,
+			);
+			name = CameraBarUITests;
+			packageProductDependencies = (
+				F17E15668393380E9F28BAD1 /* CameraBarCore */,
+			);
+			productName = CameraBarUITests;
+			productReference = 6A2C2D2428223F4FD57FFAE2 /* CameraBarUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		C26F26E37F8DD36A3D973AF6 /* CameraBarTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9587CB446969F6217C95EC9C /* Build configuration list for PBXNativeTarget "CameraBarTests" */;
+			buildPhases = (
+				FA90A6FE1BAE6FFFF297FD8F /* Sources */,
+				51DE4EFBD3DEAA1F96A8EAC8 /* Frameworks */,
+				3AEF181BEDFC937371EC7050 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CameraBarTests;
+			packageProductDependencies = (
+				9D13FC4231F35D555678BAEB /* CameraBarCore */,
+			);
+			productName = CameraBarTests;
+			productReference = EFE89110586AEB4E77005AC5 /* CameraBarTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		EB53ECE89F9BE05604B0F392 /* CameraBarWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2FA0D16F2048153F1AB1906E /* Build configuration list for PBXNativeTarget "CameraBarWidget" */;
+			buildPhases = (
+				9FF31C2CC4B023CDD711E5E4 /* Sources */,
+				2F89014E39974E18A7FD13EC /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CameraBarWidget;
+			packageProductDependencies = (
+				A6FDA039BAD81F3C6945986B /* CameraBarCore */,
+			);
+			productName = CameraBarWidget;
+			productReference = 3729A6C0D6C4E72BA073874B /* CameraBarWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		49F8FB7C41F72B2DC8A32C79 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					024A92200F2BB20BCD9D168F = {
+						ProvisioningStyle = Automatic;
+					};
+					8C5D90340A6CAC5EE26AFC54 = {
+						ProvisioningStyle = Automatic;
+						TestTargetID = 024A92200F2BB20BCD9D168F;
+					};
+					C26F26E37F8DD36A3D973AF6 = {
+						ProvisioningStyle = Automatic;
+					};
+					EB53ECE89F9BE05604B0F392 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 50ABE354592C34B4302D7BAE /* Build configuration list for PBXProject "CameraBar" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = AF4829A9532B6E00D4C583EE;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E4711785099A32884BC54F7F /* XCLocalSwiftPackageReference "." */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = F84F62A792EE0A071960A033 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				024A92200F2BB20BCD9D168F /* CameraBar */,
+				EB53ECE89F9BE05604B0F392 /* CameraBarWidget */,
+				C26F26E37F8DD36A3D973AF6 /* CameraBarTests */,
+				8C5D90340A6CAC5EE26AFC54 /* CameraBarUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3D3840FC5288E1B4F248B76A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B61255BD7F9D8064E00C4729 /* THIRD_PARTY_NOTICES.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9FF31C2CC4B023CDD711E5E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9C6A45415EA781FE40C30D1 /* CameraBarWidget.swift in Sources */,
+				6DD605104CC215CA516300F0 /* WidgetSnapshot.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C68929DA6E91DE6ABD039A47 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5351FCA3D7807E5ACB438A8 /* CameraBarUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD19224CF0F1F591F8DBBEF8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12BC44C8BBADB0F8E7825E8A /* AppController.swift in Sources */,
+				A136033D27A754650088AC2D /* CameraBarApp.swift in Sources */,
+				51CBF27E6FA48F7F570951B8 /* CameraState.swift in Sources */,
+				7E5706353F3BDB9D957D63E9 /* CredentialStore.swift in Sources */,
+				4FEC4B3988F521E8C7D3B816 /* PlaybackEngine.swift in Sources */,
+				57504DDDF2AE4107DC358025 /* SnapshotBoundary.m in Sources */,
+				B6C85A3A5A444D7335438D9A /* Views.swift in Sources */,
+				8D7E59D5C70B7435C6817288 /* WidgetSnapshot.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA90A6FE1BAE6FFFF297FD8F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BC23042E120B43B49620E0D /* AppController.swift in Sources */,
+				7A7D70E890C862D2969C2439 /* CameraState.swift in Sources */,
+				CB0BCD90DC951AA6FE01C6D6 /* CredentialStore.swift in Sources */,
+				5B149B4FF4F26335E37E15BA /* PlaybackEngine.swift in Sources */,
+				6C64C984D7367E8E74004E9A /* PlaybackTests.swift in Sources */,
+				315E167283B9920267EBE85D /* ServiceTests.swift in Sources */,
+				9B1BAA7CC48B39E10C197B8F /* SnapshotBoundary.m in Sources */,
+				3F04836C4E31A175434BDFDE /* WidgetSnapshot.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6390E0F6D40E9D3357DB37AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 024A92200F2BB20BCD9D168F /* CameraBar */;
+			targetProxy = D4BF9AC353631E4E16C25101 /* PBXContainerItemProxy */;
+		};
+		F79C30D109DB6EB07E9A4D6A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB53ECE89F9BE05604B0F392 /* CameraBarWidget */;
+			targetProxy = 14F5722751F78700E60C4839 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		44FD44A3240689CE8D6E1D0C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CAMERA_BAR_APP_GROUP = "group.com.harper.camera-bar";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		46166CAF5CD11EA1B0B1F0A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"Vendor/VLCKit - binary package\"",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)/VLCKit.framework/Headers",
+				);
+				INFOPLIST_FILE = CameraBar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.harper.camera-bar.tests";
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "CameraBar/CameraBar-Bridging-Header.h";
+			};
+			name = Release;
+		};
+		4F4DEEA861351F4DB9FCB56F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.harper.camera-bar.uitests";
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = CameraBar;
+			};
+			name = Debug;
+		};
+		6C6251D67C63C047938E1B47 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.harper.camera-bar.uitests";
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = CameraBar;
+			};
+			name = Release;
+		};
+		75FE61CA4F0AA31B9F6CB5B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CAMERA_BAR_APP_GROUP = "group.com.harper.camera-bar";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A7E8D9E1F9D3A2FF66BB9213 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CameraBar/CameraBar.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"Vendor/VLCKit - binary package\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)/VLCKit.framework/Headers",
+				);
+				INFOPLIST_FILE = CameraBar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.harper.camera-bar";
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "CameraBar/CameraBar-Bridging-Header.h";
+			};
+			name = Debug;
+		};
+		AA13312CD95CBF3708331232 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = CameraBarWidget/CameraBarWidget.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = CameraBarWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.harper.camera-bar.widget";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		AB87D7EB7B71AF5505C679B1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"Vendor/VLCKit - binary package\"",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)/VLCKit.framework/Headers",
+				);
+				INFOPLIST_FILE = CameraBar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.harper.camera-bar.tests";
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "CameraBar/CameraBar-Bridging-Header.h";
+			};
+			name = Debug;
+		};
+		C00A2FBCD157AF106FE4B22A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CameraBar/CameraBar.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"Vendor/VLCKit - binary package\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)/VLCKit.framework/Headers",
+				);
+				INFOPLIST_FILE = CameraBar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.harper.camera-bar";
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "CameraBar/CameraBar-Bridging-Header.h";
+			};
+			name = Release;
+		};
+		DE2DE763A4A9E879A1D3A47E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = CameraBarWidget/CameraBarWidget.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = CameraBarWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.harper.camera-bar.widget";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1FDB1D5449A2FD64309C290F /* Build configuration list for PBXNativeTarget "CameraBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7E8D9E1F9D3A2FF66BB9213 /* Debug */,
+				C00A2FBCD157AF106FE4B22A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2FA0D16F2048153F1AB1906E /* Build configuration list for PBXNativeTarget "CameraBarWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA13312CD95CBF3708331232 /* Debug */,
+				DE2DE763A4A9E879A1D3A47E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		50ABE354592C34B4302D7BAE /* Build configuration list for PBXProject "CameraBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75FE61CA4F0AA31B9F6CB5B6 /* Debug */,
+				44FD44A3240689CE8D6E1D0C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		569DA3E6D1E43887EB589A6F /* Build configuration list for PBXNativeTarget "CameraBarUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F4DEEA861351F4DB9FCB56F /* Debug */,
+				6C6251D67C63C047938E1B47 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9587CB446969F6217C95EC9C /* Build configuration list for PBXNativeTarget "CameraBarTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB87D7EB7B71AF5505C679B1 /* Debug */,
+				46166CAF5CD11EA1B0B1F0A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		E4711785099A32884BC54F7F /* XCLocalSwiftPackageReference "." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = .;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9D13FC4231F35D555678BAEB /* CameraBarCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CameraBarCore;
+		};
+		A6FDA039BAD81F3C6945986B /* CameraBarCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CameraBarCore;
+		};
+		C40EF52C1D41BE9CDED05BFD /* CameraBarCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CameraBarCore;
+		};
+		F17E15668393380E9F28BAD1 /* CameraBarCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CameraBarCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 49F8FB7C41F72B2DC8A32C79 /* Project object */;
+}
