@@ -11,9 +11,12 @@
 ## State
 
 - Design approved. Repository initialized on `wip/camera-bar`.
-- Task 1 pending; tasks 2–4 pending.
+- Task 1 complete in `01f70ac`: 18 tests pass, format clean; independent spec and quality reviews approved.
+- Tasks 2–3 will use one native-app implementation agent because app, player, extension, and Xcode targets share build configuration. Both sets of acceptance checks remain required.
+- Tasks 2–3 in progress with native-app agent; Task 4 pending.
 - Compaction count: 0.
 - No signing identity available; local widget loading must be checked.
+- Native desktop-control inventory failed with `Sky Computer Use native pipe startup failed`; retry after build and use Xcode UI testing for repeatable app checks.
 
 ## Task 1: Camera model and snapshot storage
 
@@ -29,7 +32,7 @@ Create `Package.swift`, `Sources/CameraBarCore/Camera.swift`, `Sources/CameraBar
 
 Create `CameraBar/` sources, `CameraBarTests/`, Xcode project configuration, and `scripts/build`.
 
-1. Verify official VLCKit package/release APIs and pin dependency; configure native app target and tests. Use macOS 14 minimum for desktop widgets. No runtime dependency on a separately installed VLC app.
+1. Use the official stable VLCKit 3.7.3 XCFramework, pinned by archive SHA-256, rather than the alpha Swift package. Configure native app target and tests. Use macOS 14 minimum for desktop widgets. No runtime dependency on a separately installed VLC app.
 2. Write failing tests for real Keychain round trips and safe error handling, plus camera state transitions and stale callback rejection. Implement the smallest state owner with one selected camera.
 3. Write a real RTSP test before implementing playback; use a locally generated test pattern served over RTSP. Confirm the feature is absent, then implement live video, muted audio, bounded background snapshot capture, cancellation, and reconnect behavior.
 4. Add settings for named RTSP addresses and a camera picker in the menu bar popover. Test empty state, add/edit/remove, selection persistence, live display, and connection failure via UI automation or XCTest. Never add a mock mode.
