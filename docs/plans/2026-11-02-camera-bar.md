@@ -31,7 +31,7 @@
 ## Remaining setup and limits
 
 - Release blocker: native desktop widget activation still requires a real Apple signing team and matching registered App Group. Doctor Biz explicitly accepted local delivery with these steps documented in README. Sign and verify the desktop widget before distribution.
-- Moderate compatibility limit: cameras whose initial decoding exceeds the roughly 15-second acquisition deadline can time out. Low-frame-rate capture is tested, but the warmed sparse-stream test does not prove cold startup within that deadline. No physical camera was provided; validation used real local RTSP streams.
+- Moderate compatibility limit: cameras whose initial decoding exceeds the roughly 15-second acquisition deadline can time out. Low-frame-rate capture is tested, but the warmed sparse-stream test does not prove cold startup within that deadline. Initial delivery used local RTSP streams. On 2026-11-03, a supplied physical-camera stream decoded through FFmpeg after correcting its UniFi port from 7441 to 7447; native app UI verification of that camera remains unperformed because desktop control failed to start.
 - WidgetKit controls refresh timing; Camera Bar requests fresh snapshots about every five minutes while running. It is not a live-video widget.
 
 ## Task 1: Camera model and snapshot storage

@@ -16,6 +16,8 @@ The build script downloads stable VLCKit 3.7.3 from VideoLAN and verifies its pi
 
 Click the camera icon in the menu bar, open settings, and add your camera's RTSP address. Complete addresses, including passwords and query tokens, stay in Keychain. The catalog stores only camera IDs, names, and selection under `~/Library/Application Support/CameraBar/`. A camera's display name appears in the widget; do not put passwords in names.
 
+For UniFi Protect's plain RTSP output, use `rtsp://<console>:7447/<stream-token>`. Port `7441` serves RTSPS, so changing only `rtsps://` to `rtsp://` will not work. Keep the same stream token and omit `?enableSrtp` when using the plain RTSP endpoint. Camera Bar currently accepts plain RTSP only. See [Ubiquiti's port reference](https://help.ui.com/hc/en-us/articles/218506997-Required-Ports-Reference).
+
 Opening the viewer connects immediately. Closing it ends live playback after a bounded snapshot attempt. While Camera Bar runs, it briefly connects about every five minutes to capture a new widget image. Each connection and capture attempt has an approximately 15-second deadline; very slow camera startup can miss that window. Failed captures keep the last image and its original capture time. Changing cameras clears the old image. Quitting stops updates. The widget's displayed time is the actual successful capture time; WidgetKit controls when the desktop refreshes.
 
 ## Native widget signing
