@@ -26,7 +26,7 @@
 - Actual UI automation covers add/select/edit/remove, live viewing, selection persistence, cold widget-link launch, offline state, and retry control. Inspected the captured viewer and real decoded frame visually. A deliberate failure separately proved test-owned catalog and Keychain cleanup; final catalog is empty and the fixture listener stopped.
 - Independently verified the finished app with `codesign --verify --deep --strict`. The embedded extension has the WidgetKit extension identifier and matching App Group entitlements/settings. This verifies local packaging, not signed desktop activation.
 - Final logs: `.build/final-check-run.log`, `.build/check-*.log`, `.build/service-tests.log`, `.build/ui-tests.log`, and `.build/app-build.log`. Final result bundles end in `Test-CameraBarServices-2026.11.02_21-21-05--0600.xcresult` and `Test-CameraBarUI-2026.11.02_21-22-22--0600.xcresult` under `.build/xcode/Logs/Test/`.
-- Built app: `.build/xcode/Build/Products/Debug/CameraBar.app`. Work remains on `wip/camera-bar`; no merge requested. On 2026-11-06, Doctor Biz authorized publishing the repository to `harperreed/camera-bar`. Use private visibility for the new repository and preserve the existing branch/history.
+- Built app: `.build/xcode/Build/Products/Debug/CameraBar.app`. On 2026-11-06, Doctor Biz authorized publishing to `harperreed/camera-bar`. Created the private GitHub repository and pushed the existing history on `wip/camera-bar`, its default branch. Local and remote commit IDs matched after pushing; no merge performed.
 
 ## Remaining setup and limits
 
