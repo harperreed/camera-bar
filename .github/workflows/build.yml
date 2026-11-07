@@ -13,12 +13,18 @@ permissions:
 
 jobs:
   checks:
-    runs-on: macos-26
+    runs-on: macos-26-intel
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
+      - name: Report host OpenGL support
+        run: |
+          mkdir -p .build/rtsp
+          clang -fobjc-arc -framework AppKit scripts/rtsp-graphics.m -o .build/rtsp/graphics-probe
+          .build/rtsp/graphics-probe > .build/rtsp/graphics.log 2>&1
+          cat .build/rtsp/graphics.log
       - name: Install check tools
         run: brew install xcodegen ffmpeg mediamtx actionlint shellcheck ripgrep
       - name: Run complete checks
@@ -34,6 +40,7 @@ jobs:
             .build/service-tests.log
             .build/ui-tests.log
             .build/app-build.log
+            .build/rtsp/*.log
           include-hidden-files: true
           retention-days: 7
 

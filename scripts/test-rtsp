@@ -37,7 +37,10 @@ paths:
 CONFIG
 server_pid=''
 publisher_pid=''
+preflight_pid=''
 cleanup() {
+  [[ -z "$preflight_pid" ]] || kill -KILL "$preflight_pid" 2>/dev/null || true
+  [[ -z "$preflight_pid" ]] || wait "$preflight_pid" 2>/dev/null || true
   [[ -z "$publisher_pid" ]] || kill "$publisher_pid" 2>/dev/null || true
   [[ -z "$server_pid" ]] || kill "$server_pid" 2>/dev/null || true
   [[ -z "$publisher_pid" ]] || wait "$publisher_pid" 2>/dev/null || true
@@ -61,6 +64,32 @@ ffmpeg -nostdin -hide_banner -loglevel error -re -f lavfi -i 'testsrc2=size=640x
 publisher_pid=$!
 sleep 1
 kill -0 "$publisher_pid" 2>/dev/null || { cat .build/rtsp/publisher.log >&2; exit 1; }
+# Decode a real frame before declaring readiness; a live publisher alone is insufficient.
+rm -f .build/rtsp/preflight.png
+ffmpeg -nostdin -hide_banner -loglevel error -rtsp_transport tcp -timeout 10000000 \
+  -i rtsp://127.0.0.1:18554/live -frames:v 1 -update 1 .build/rtsp/preflight.png \
+  > .build/rtsp/preflight.log 2>&1 &
+preflight_pid=$!
+for _attempt in {1..200}; do
+  kill -0 "$preflight_pid" 2>/dev/null || break
+  sleep 0.1
+done
+if kill -0 "$preflight_pid" 2>/dev/null; then
+  echo 'RTSP frame preflight exceeded 20 seconds; see .build/rtsp/preflight.log' >&2
+  exit 1
+fi
+preflight_status=0
+wait "$preflight_pid" || preflight_status=$?
+preflight_pid=''
+if [[ "$preflight_status" != 0 || ! -s .build/rtsp/preflight.png ]]; then
+  cat .build/rtsp/preflight.log >&2
+  echo 'RTSP fixture could not decode a frame; see .build/rtsp/ logs.' >&2
+  exit 1
+fi
+echo 'RTSP fixture decoded a real frame.'
+clang -fobjc-arc -framework AppKit scripts/rtsp-graphics.m -o .build/rtsp/graphics-probe
+.build/rtsp/graphics-probe > .build/rtsp/graphics.log 2>&1
+cat .build/rtsp/graphics.log
 if [[ "$serve" == true ]]; then
   echo 'RTSP fixture ready: rtsp://127.0.0.1:18554/live (Ctrl-C to stop)'
   wait "$server_pid"
