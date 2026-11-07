@@ -3,12 +3,21 @@
 # ABOUTME: Preserves logs in .build and finishes with a runnable local app bundle.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-if [[ "${1:-}" == --help ]]; then
-  echo 'Usage: scripts/check'
-  echo 'Requires Xcode, XcodeGen, ffmpeg, mediamtx, actionlint, shellcheck, ripgrep, and a logged-in desktop for real UI tests.'
-  echo 'Runs all checks; failures point to full logs under .build/.'
-  exit 0
-fi
+usage() {
+  echo 'Usage: scripts/check [--ci | --help]'
+  echo 'Requires Xcode, XcodeGen, ffmpeg, mediamtx, actionlint, shellcheck, and ripgrep.'
+  echo 'Default: full checks, including real RTSP playback and UI tests on a logged-in desktop.'
+  echo '--ci: formatting, shell, workflow, release tools, core, native services, and app build.'
+  echo 'Real RTSP playback and UI checks remain local; failures point to logs under .build/.'
+}
+mode=full
+if (( $# > 1 )); then usage >&2; exit 1; fi
+case "${1:-}" in
+  '') ;;
+  --ci) mode=ci ;;
+  --help) usage; exit 0 ;;
+  *) usage >&2; exit 1 ;;
+esac
 mkdir -p .build
 run() {
   name=$1
@@ -21,22 +30,36 @@ run() {
   fi
 }
 check_shell() {
-  for script in scripts/bootstrap scripts/build scripts/check scripts/test-rtsp scripts/release-build scripts/test-release; do
+  for script in scripts/bootstrap scripts/build scripts/check scripts/test-rtsp scripts/release-build scripts/test-release Tests/Checks/Arguments.sh; do
     bash -n "$script" || return
   done
-  shellcheck scripts/bootstrap scripts/build scripts/check scripts/test-rtsp scripts/release-build scripts/test-release
+  shellcheck scripts/bootstrap scripts/build scripts/check scripts/test-rtsp scripts/release-build scripts/test-release Tests/Checks/Arguments.sh
 }
+run check-cli bash Tests/Checks/Arguments.sh
+if [[ "$mode" == ci ]]; then
+  echo 'CI scope: service tests and build; real RTSP playback and UI checks remain local.'
+fi
 run bootstrap scripts/bootstrap
 run format swift format lint --strict --recursive Package.swift Sources Tests CameraBar CameraBarTests CameraBarUITests CameraBarWidget Shared scripts/release
 run shell check_shell
 run workflow actionlint
 run release-tools scripts/test-release
 run core swift test
-run native scripts/test-rtsp
-cp .build/native-tests.log .build/service-tests.log
-run ui scripts/test-rtsp --ui
-cp .build/native-tests.log .build/ui-tests.log
+if [[ "$mode" == ci ]]; then
+  run native scripts/test-rtsp -only-testing:CameraBarTests/ServiceTests
+  cp .build/native-tests.log .build/service-tests.log
+else
+  run native scripts/test-rtsp
+  cp .build/native-tests.log .build/service-tests.log
+  run ui scripts/test-rtsp --ui
+  cp .build/native-tests.log .build/ui-tests.log
+fi
 run build scripts/build
-echo 'All checks passed. App: .build/xcode/Build/Products/Debug/CameraBar.app'
+if [[ "$mode" == ci ]]; then
+  echo 'CI checks passed. Run scripts/check locally for real RTSP playback and UI verification.'
+else
+  echo 'All checks passed.'
+fi
+echo 'App: .build/xcode/Build/Products/Debug/CameraBar.app'
 echo 'Full logs: .build/check-*.log, .build/service-tests.log, .build/ui-tests.log, .build/app-build.log'
 echo 'Native widget desktop activation still requires your development signing and App Group setup.'

@@ -20,7 +20,7 @@ Doctor Biz approved signing, Apple notarization, and GitHub Release publication 
 
 ## State
 
-- Implementation written; independent review in progress. Local release-tool tests, Swift formatting/type checks, ShellCheck, and actionlint passed. Full canonical checks will run on a fresh GitHub runner.
+- Release implementation and independent reviews are complete. Local notarization passed. On 2026-11-07, Doctor Biz requested a release tag; proceeding with the recommended hosted/local test split, then verifying GitHub signing/notarization and publishing `v1.0.0` through its tag workflow.
 - Starting commit: `b5fa0bc7a6887248b4c2e0ff11a35728adb59e44`.
 - Compaction count: 1.
 - Local widget gallery activation remains outside the evidence from signing/build checks.
@@ -35,3 +35,4 @@ Doctor Biz approved signing, Apple notarization, and GitHub Release publication 
 - Release fixes committed and pushed as `dc05204`. Its duplicate hosted run was canceled because the unchanged graphics-dependent checks have a confirmed runner incompatibility; no successful hosted release is claimed.
 - Local RTSP rerun decoded real frames, including low-rate and sparse streams, but six tests that write Keychain credentials failed with `-25308` (user interaction not allowed). The default keychain still points to the original login keychain; `SecKeychainGetStatus` returned flags `2` (readable, locked). This is not a passing full suite. Unlock the login keychain before retrying those checks; no unlocking or credential-policy change attempted.
 - Pending decision: hosted test split versus GPU runner. Pending verification: full local suite with unlocked login keychain, successful hosted signing/notarization run under the chosen test policy, and manual widget gallery check.
+- 2026-11-07 follow-up supersedes the pending hosted-test decision: Doctor Biz said “did you run it on github? tag a release.” Treating that as approval to proceed with the proposed split, stated explicitly in commentary. Default `scripts/check` retains every local test; `scripts/check --ci` runs core, service, release-tool, lint, and build checks on GitHub. Local login Keychain remains locked, so no fresh full local-suite success is claimed.

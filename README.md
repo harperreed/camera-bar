@@ -46,7 +46,7 @@ This command creates a local build without a secure timestamp or notarization. B
 
 ## GitHub releases
 
-GitHub Actions runs `scripts/check` on branch pushes, pull requests, version tags, and manual runs. A successful tag run builds a universal Intel/Apple Silicon Release app, signs the app and widget with Developer ID and hardened runtime, notarizes it with Apple, staples the ticket, and verifies Gatekeeper acceptance. The release contains `CameraBar-VERSION.zip` and its `.sha256` checksum. Both bundles use the tag version and the Actions run number as their build number.
+GitHub Actions runs `scripts/check --ci` on branch pushes, pull requests, version tags, and manual runs. Hosted checks cover formatting, shell and workflow validation, release tools, core tests, all six native Keychain/file service tests, and the app build. Real VLCKit playback and UI tests remain in the full local `scripts/check` suite because standard hosted macOS runners lack the accelerated OpenGL output this VLCKit build requires. A successful tag run builds a universal Intel/Apple Silicon Release app, signs the app and widget with Developer ID and hardened runtime, notarizes it with Apple, staples the ticket, and verifies Gatekeeper acceptance. The release contains `CameraBar-VERSION.zip` and its `.sha256` checksum. Both bundles use the tag version and the Actions run number as their build number.
 
 Set these repository **Actions secrets** before running the signing job:
 
@@ -86,7 +86,9 @@ brew install ffmpeg mediamtx actionlint shellcheck ripgrep
 scripts/check
 ```
 
-Checks cover release-tool and workflow validation, core tests, Swift formatting, native Keychain/file tests, actual RTSP decoding and image pixels, camera cancellation, background playback lifetime, and the actual UI camera lifecycle. Native tests use disposable Keychain IDs and files. UI tests add uniquely named local cameras through the ordinary settings UI, remove their own records even after failures, and restore the prior camera selection and running state. Run UI tests on a logged-in macOS desktop with Accessibility permission for Xcode's test runner; they must not run against a session where changing the selected camera would interrupt your work.
+The default `scripts/check` runs the full suite: release-tool and workflow validation, core tests, Swift formatting, native Keychain/file tests, actual RTSP decoding and image pixels, camera cancellation, background playback lifetime, and the actual UI camera lifecycle. Native tests use disposable Keychain IDs and files. UI tests add uniquely named local cameras through the ordinary settings UI, remove their own records even after failures, and restore the prior camera selection and running state. Run UI tests on a logged-in macOS desktop with Accessibility permission for Xcode's test runner; they must not run against a session where changing the selected camera would interrupt your work.
+
+`scripts/check --ci` runs the hosted subset without launching the app UI or changing the selected camera. Passing CI alone does not establish that playback, the camera UI lifecycle, or the desktop widget works; run the full suite and check the widget on a suitable local Mac before shipping. Native Keychain service tests require an unlocked login keychain.
 
 `scripts/test-rtsp --serve` runs just the local fixture at `rtsp://127.0.0.1:18554/live`. Stop it with Ctrl-C. `scripts/test-rtsp --ui` runs UI tests against that fixture. Scripts refuse an occupied port and terminate only processes they started. Logs and XCTest attachments live in `.build/`.
 
