@@ -15,7 +15,7 @@
 - Tasks 2–3 complete in `0a7b6af`: native app, RTSP player, native widget extension, and real integration/UI tests. Independent spec and quality reviews approved.
 - Task 4 complete in `da652f4`: reproducible dependency bootstrap, build, real RTSP fixture, canonical check, and signing instructions. Final verification passed; details below.
 - Compaction count: 1.
-- No signing identity available. Doctor Biz explicitly chose "build locally and document the signing step". Verify extension packaging; signed desktop activation is a documented user setup step, not a completion claim.
+- Initial delivery used ad hoc signing as Doctor Biz requested. On 2026-11-06, Doctor Biz supplied signing assets; a separate Developer ID Release build and real shared-container probes passed. Desktop gallery activation remains unverified; see the signing follow-up below.
 - Native desktop-control inventory failed twice with `Sky Computer Use native pipe startup failed`; real XCTest UI testing provides repeatable app checks and popover screenshots.
 
 ## Delivery verification
@@ -30,9 +30,18 @@
 
 ## Remaining setup and limits
 
-- Release blocker: native desktop widget activation still requires a real Apple signing team and matching registered App Group. Doctor Biz explicitly accepted local delivery with these steps documented in README. Sign and verify the desktop widget before distribution.
+- Distribution blocker: the Developer ID Release build is signed locally but lacks a secure timestamp and notarization. Native widget gallery activation/rendering and existing camera Keychain access under the new signature remain unverified. Verify those and notarize before distribution.
 - Moderate compatibility limit: cameras whose initial decoding exceeds the roughly 15-second acquisition deadline can time out. Low-frame-rate capture is tested, but the warmed sparse-stream test does not prove cold startup within that deadline. Initial delivery used local RTSP streams. On 2026-11-03, a supplied physical-camera stream decoded through FFmpeg after correcting its UniFi port from 7441 to 7447; native app UI verification of that camera remains unperformed because desktop control failed to start.
 - WidgetKit controls refresh timing; Camera Bar requests fresh snapshots about every five minutes while running. It is not a live-video widget.
+
+## Signing follow-up, 2026-11-06
+
+- Doctor Biz supplied Developer ID assets for Harper Rules, LLC, team `79867GLCBR`; certificate expires 2027-02-01. No API key or developer-portal mutation was needed.
+- Used the macOS App Group `79867GLCBR.com.harper.camera-bar`. Apple documents that team-prefixed groups need no provisioning profile or portal registration; corrected README's earlier broader requirement.
+- Built separately at `.build/signed-xcode/Build/Products/Release/CameraBar.app`, leaving the existing ad hoc app and camera data intact. The app, widget, and bundled VLCKit share the Developer ID team and pass strict deep verification. Hardened runtime is enabled; secure timestamping and notarization were not performed.
+- Real signed probes verified bidirectional file sharing between sandboxed and unsandboxed processes and removed their UUID-named test file. Temporary private-key import was nonextractable and restricted to codesign. The helper temporarily added its keychain to the search list, then deleted it and restored the original list; root independently confirmed cleanup.
+- Independent review approved signing and shared-container evidence. Native Xcode signing also passed once the temporary keychain was searchable. Evidence is in `.build/signing-work/build.log`, `native-build.log`, and `native-run.log`. Fresh Release compilation reports VLCKit header warnings plus the known host Xcode diagnostics.
+- No product source changed; prior 33-test result remains historical, not a new test run. Desktop control again failed with `Sky Computer Use native pipe startup failed`, so the old running app was not replaced and no widget was added to the desktop.
 
 ## Task 1: Camera model and snapshot storage
 

@@ -22,13 +22,27 @@ Opening the viewer connects immediately. Closing it ends live playback after a b
 
 ## Native widget signing
 
-The default script makes an ad hoc local build suitable for the viewer. A working desktop widget requires your Apple development signing and a registered App Group; ad hoc builds do not establish a supported shared-container entitlement. Camera Bar reports unavailable widget sharing instead of silently writing a separate unshared file.
+The default script makes an ad hoc local build suitable for the viewer. The widget needs Apple signing and an authorized shared App Group. Camera Bar reports unavailable widget sharing when its running signature cannot establish group membership.
 
-1. Open `CameraBar.xcodeproj` in Xcode. Select your development team for both `CameraBar` and `CameraBarWidget`. To keep signing settings across `scripts/build` runs, save the team and bundle IDs in `project.yml`; the script regenerates the Xcode project.
-2. Set unique bundle IDs for both targets and register an App Group in your developer account. Set `CAMERA_BAR_APP_GROUP` to that exact identifier on both targets (default: `group.com.harper.camera-bar`). Both entitlements and Info.plist read that setting. Persist it in `project.yml`, or pass `CAMERA_BAR_APP_GROUP=your.registered.group` to `scripts/build --signed` alongside `DEVELOPMENT_TEAM=YOUR_TEAM_ID`.
-3. Enable App Groups for both signing profiles, build and run the signed app, then add **Camera Bar** from macOS's widget gallery. Select a camera and keep the app running.
+For this macOS-only app, a Developer ID certificate and an App Group named `YOUR_TEAM_ID.com.harper.camera-bar` are sufficient for signing and shared-container access. Apple verifies the team prefix against the signature; this form needs neither a provisioning profile nor registration in the developer portal. The `group.` form instead requires a matching provisioning profile. See [Apple's App Group requirements](https://developer.apple.com/documentation/xcode/accessing-app-group-containers).
 
-A local build verifies the embedded extension. Signed desktop activation still needs a suitable signing identity and matching App Group profiles.
+For a local signed Release build, make the certificate and private key available in a keychain on your user search list, then substitute your team and certificate SHA-1 below. `security find-identity -v -p codesigning` lists available identities. Keep private keys and passwords outside the repository.
+
+```sh
+scripts/bootstrap
+xcodebuild -project CameraBar.xcodeproj -scheme CameraBar \
+  -configuration Release -destination "platform=macOS,arch=$(uname -m)" \
+  -derivedDataPath .build/signed-xcode \
+  CODE_SIGNING_ALLOWED=YES CODE_SIGN_STYLE=Manual \
+  DEVELOPMENT_TEAM=YOUR_TEAM_ID CODE_SIGN_IDENTITY=YOUR_CERTIFICATE_SHA1 \
+  CAMERA_BAR_APP_GROUP=YOUR_TEAM_ID.com.harper.camera-bar \
+  ENABLE_HARDENED_RUNTIME=YES 'OTHER_CODE_SIGN_FLAGS=--timestamp=none' build
+codesign --verify --deep --strict .build/signed-xcode/Build/Products/Release/CameraBar.app
+```
+
+Quit the ad hoc viewer, open `.build/signed-xcode/Build/Products/Release/CameraBar.app`, and add **Camera Bar** through macOS's **Edit Widgets**. Select a camera and keep the app running. Build-setting overrides leave the default ad hoc project configuration intact; persist signing settings in `project.yml` if desired, since bootstrap regenerates the Xcode project.
+
+This command creates a local build without a secure timestamp or notarization. Before distributing outside your Mac, use secure timestamping, notarize the app, and verify the widget in the desktop gallery. On 2026-11-06, Developer ID signing and real sandboxed/unsandboxed App Group file sharing passed for team `79867GLCBR`; gallery rendering and existing camera credential access under the new signature remain unverified because desktop control could not start. The temporary signing keychain was removed after the build.
 
 ## Verification
 
@@ -44,6 +58,8 @@ Checks cover core tests, Swift formatting, native Keychain/file tests, actual RT
 `scripts/test-rtsp --serve` runs just the local fixture at `rtsp://127.0.0.1:18554/live`. Stop it with Ctrl-C. `scripts/test-rtsp --ui` runs UI tests against that fixture. Scripts refuse an occupied port and terminate only processes they started. Logs and XCTest attachments live in `.build/`.
 
 On the development Mac, Xcode reports mismatched CoreDevice/CoreSimulator components, an AppIntents metadata notice, and system service diagnostics from `linkd` and `DetachedSignatures`. These are retained in the full logs. Update the Xcode platform components to resolve the host installation messages. VLCKit also reports that its snapshot color conversion uses the CPU; the integration tests verify the resulting image pixels. These diagnostics are separate from compiler errors and test failures.
+
+A fresh Release build also reports warnings in VLCKit's bundled headers about framework include quoting and documentation. The signed Release build succeeded with those vendor warnings; they remain in `.build/signing-work/build.log` for the local signing run.
 
 ## Dependency license
 
