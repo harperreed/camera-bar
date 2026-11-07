@@ -20,9 +20,10 @@ Doctor Biz approved signing, Apple notarization, and GitHub Release publication 
 
 ## State
 
-- Design approved; implementation in progress.
+- Implementation written; independent review in progress. Local release-tool tests, Swift formatting/type checks, ShellCheck, and actionlint passed. Full canonical checks will run on a fresh GitHub runner.
 - Starting commit: `b5fa0bc7a6887248b4c2e0ff11a35728adb59e44`.
 - Compaction count: 1.
 - Local widget gallery activation remains outside the evidence from signing/build checks.
 - Uploaded and verified all seven required repository Actions secret names. No admin key or certificate request uploaded.
 - Apple authentication preflight returned HTTP 403: a required team agreement is missing or expired. Doctor Biz has been asked to review it. Notarization must remain a release gate.
+- Doctor Biz chose to finish setup now and handle the Apple agreement later. Verify all reachable stages; report notarization and publication as unverified until that account blocker is resolved.

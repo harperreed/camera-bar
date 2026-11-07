@@ -1,0 +1,14 @@
+#!/bin/bash
+# ABOUTME: Checks release inputs and real disposable-keychain cleanup without credentials.
+# ABOUTME: Compiles the release command too, catching type errors before signing jobs run.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+if [[ "${1:-}" == --help ]]; then
+  echo 'Usage: scripts/test-release'
+  echo 'Requires macOS and Xcode. Creates and deletes disposable keychains; does not build or launch the app.'
+  exit 0
+fi
+mkdir -p .build
+swiftc scripts/release/Support.swift Tests/ReleaseTools/ReleaseToolsTests.swift -o .build/release-tool-tests
+.build/release-tool-tests
+swiftc scripts/release/Support.swift scripts/release/Main.swift -o .build/release-tool

@@ -5,7 +5,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 if [[ "${1:-}" == --help ]]; then
   echo 'Usage: scripts/check'
-  echo 'Requires Xcode, XcodeGen, ffmpeg, mediamtx, and a logged-in desktop for real UI tests.'
+  echo 'Requires Xcode, XcodeGen, ffmpeg, mediamtx, actionlint, shellcheck, ripgrep, and a logged-in desktop for real UI tests.'
   echo 'Runs all checks; failures point to full logs under .build/.'
   exit 0
 fi
@@ -21,13 +21,16 @@ run() {
   fi
 }
 check_shell() {
-  for script in scripts/bootstrap scripts/build scripts/check scripts/test-rtsp; do
+  for script in scripts/bootstrap scripts/build scripts/check scripts/test-rtsp scripts/release-build scripts/test-release; do
     bash -n "$script" || return
   done
+  shellcheck scripts/bootstrap scripts/build scripts/check scripts/test-rtsp scripts/release-build scripts/test-release
 }
 run bootstrap scripts/bootstrap
-run format swift format lint --strict --recursive Package.swift Sources Tests CameraBar CameraBarTests CameraBarUITests CameraBarWidget Shared
+run format swift format lint --strict --recursive Package.swift Sources Tests CameraBar CameraBarTests CameraBarUITests CameraBarWidget Shared scripts/release
 run shell check_shell
+run workflow actionlint
+run release-tools scripts/test-release
 run core swift test
 run native scripts/test-rtsp
 cp .build/native-tests.log .build/service-tests.log
