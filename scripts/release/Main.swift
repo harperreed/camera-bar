@@ -29,7 +29,8 @@ struct ReleaseMain {
           "-project", "CameraBar.xcodeproj", "-scheme", "CameraBar", "-configuration", "Release",
           "-destination", "generic/platform=macOS", "-derivedDataPath", ".build/release-xcode",
           "ARCHS=arm64 x86_64", "ONLY_ACTIVE_ARCH=NO", "CODE_SIGNING_ALLOWED=YES",
-          "CODE_SIGN_STYLE=Manual", "DEVELOPMENT_TEAM=\(secret["APPLE_TEAM_ID"]!)",
+          "CODE_SIGN_STYLE=Manual", "CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO",
+          "DEVELOPMENT_TEAM=\(secret["APPLE_TEAM_ID"]!)",
           "CODE_SIGN_IDENTITY=\(secret["APPLE_SIGNING_IDENTITY"]!)",
           "CAMERA_BAR_APP_GROUP=\(secret["APPLE_TEAM_ID"]!).com.harper.camera-bar",
           "OTHER_CODE_SIGN_FLAGS=--keychain \(path) --timestamp", "ENABLE_HARDENED_RUNTIME=YES",
@@ -51,9 +52,11 @@ struct ReleaseMain {
       guard info?["CFBundleShortVersionString"] as? String == options.version,
         info?["CFBundleVersion"] as? String == options.build
       else { throw ReleaseFailure(message: "\(name) bundle version does not match the release") }
-      try run(
-        "/usr/bin/lipo", [bundle + "/" + executable, "-verify_arch", "arm64", "x86_64"],
-        log: ".build/release-\(name)-architectures.log")
+      try verifyUniversalBinary(
+        bundle + "/" + executable, logPrefix: ".build/release-\(name)-architectures")
+      try verifyReleaseEntitlements(
+        bundle, appGroup: "\(secret["APPLE_TEAM_ID"]!).com.harper.camera-bar",
+        logPrefix: ".build/release-\(name)-entitlements")
       try run(
         "/usr/bin/codesign", ["--display", "--verbose=4", bundle],
         log: ".build/release-\(name)-signature.log")
@@ -66,10 +69,9 @@ struct ReleaseMain {
           message: "\(name) lacks the expected team, hardened runtime, or secure timestamp")
       }
     }
-    try run(
-      "/usr/bin/lipo",
-      [app + "/Contents/Frameworks/VLCKit.framework/VLCKit", "-verify_arch", "arm64", "x86_64"],
-      log: ".build/release-vlc-architectures.log")
+    try verifyUniversalBinary(
+      app + "/Contents/Frameworks/VLCKit.framework/VLCKit",
+      logPrefix: ".build/release-vlc-architectures")
     print(
       "Verified Developer ID signatures, secure timestamps, hardened runtime, matching versions, and arm64/x86_64 app, widget, and VLC."
     )

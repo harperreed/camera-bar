@@ -175,3 +175,37 @@ func withTemporaryDirectory<T>(prefix: String, _ body: (URL) throws -> T) throws
   }
   return try result.get()
 }
+
+func verifyUniversalBinary(_ path: String, logPrefix: String) throws {
+  for architecture in ["arm64", "x86_64"] {
+    try run(
+      "/usr/bin/lipo", [path, "-verify_arch", architecture],
+      log: logPrefix + "-" + architecture + ".log")
+  }
+}
+
+func validateReleaseEntitlements(_ data: Data, appGroup: String) throws {
+  guard
+    let entitlements = try PropertyListSerialization.propertyList(from: data, format: nil)
+      as? [String: Any]
+  else {
+    throw ReleaseFailure(message: "Release entitlements must be a property-list dictionary")
+  }
+  guard entitlements["com.apple.security.get-task-allow"] == nil else {
+    throw ReleaseFailure(message: "Release signature must omit com.apple.security.get-task-allow")
+  }
+  guard entitlements["com.apple.security.application-groups"] as? [String] == [appGroup] else {
+    throw ReleaseFailure(message: "Release signature has an unexpected App Group")
+  }
+}
+
+func verifyReleaseEntitlements(_ bundle: String, appGroup: String, logPrefix: String) throws {
+  for architecture in ["arm64", "x86_64"] {
+    let log = logPrefix + "-" + architecture + ".log"
+    try run(
+      "/usr/bin/codesign",
+      ["--display", "--arch", architecture, "--entitlements", "-", "--xml", bundle], log: log,
+      errorLog: logPrefix + "-" + architecture + "-diagnostics.log")
+    try validateReleaseEntitlements(Data(contentsOf: URL(fileURLWithPath: log)), appGroup: appGroup)
+  }
+}

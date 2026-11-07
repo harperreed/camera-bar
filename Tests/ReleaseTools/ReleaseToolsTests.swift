@@ -11,6 +11,17 @@ struct ReleaseToolsTests {
   }
 
   static func main() throws {
+    if CommandLine.arguments.count == 4 && CommandLine.arguments[1] == "--verify-binary" {
+      do {
+        try verifyUniversalBinary(CommandLine.arguments[2], logPrefix: CommandLine.arguments[3])
+      } catch {
+        fputs(error.localizedDescription + "\n", stderr)
+        exit(1)
+      }
+      return
+    }
+    try testUniversalBinaries()
+    try testReleaseEntitlements()
     let options = try ReleaseOptions(arguments: ["v12.3.4", "75"])
     try require(options.version == "12.3.4" && options.build == "75", "Version or build differs")
     for args in [
@@ -116,4 +127,85 @@ struct ReleaseToolsTests {
     }
     print("Release argument, credential, and real keychain cleanup tests passed")
   }
+  static func testUniversalBinaries() throws {
+    try withTemporaryDirectory(prefix: "camera-bar-architectures-test-") { directory in
+      let source = directory.appendingPathComponent("fixture.c").path
+      try "int fixture(void) { return 42; }\n".write(
+        toFile: source, atomically: true, encoding: .utf8)
+      let architectures = ["arm64", "x86_64"]
+      for architecture in architectures {
+        try run(
+          "/usr/bin/clang",
+          [
+            "-arch", architecture, "-c", source, "-o",
+            directory.appendingPathComponent(architecture + ".o").path,
+          ], log: directory.appendingPathComponent(architecture + "-compile.log").path)
+      }
+      let universal = directory.appendingPathComponent("universal.o").path
+      try run(
+        "/usr/bin/lipo",
+        [
+          "-create", directory.appendingPathComponent("arm64.o").path,
+          directory.appendingPathComponent("x86_64.o").path, "-output", universal,
+        ], log: directory.appendingPathComponent("combine.log").path)
+      try verifyUniversalBinary(
+        universal, logPrefix: directory.appendingPathComponent("universal-verification").path)
+      for architecture in architectures {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: CommandLine.arguments[0])
+        process.arguments = [
+          "--verify-binary", directory.appendingPathComponent(architecture + ".o").path,
+          directory.appendingPathComponent(architecture + "-verification").path,
+        ]
+        process.environment = childEnvironment(ProcessInfo.processInfo.environment)
+        let output = Pipe()
+        process.standardOutput = output
+        process.standardError = output
+        try process.run()
+        let diagnostics = String(
+          decoding: output.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
+        process.waitUntilExit()
+        try require(
+          process.terminationStatus != 0, "Accepted a thin \(architecture) Mach-O as universal")
+        try require(
+          diagnostics.contains("lipo failed"),
+          "Thin binary did not fail architecture verification: \(diagnostics)")
+      }
+    }
+  }
+
+  static func testReleaseEntitlements() throws {
+    let group = "TESTTEAM.com.harper.camera-bar"
+    let valid = ["com.apple.security.application-groups": [group]]
+    try validateReleaseEntitlements(
+      PropertyListSerialization.data(fromPropertyList: valid, format: .xml, options: 0),
+      appGroup: group)
+    let invalid: [[String: Any]] = [
+      [
+        "com.apple.security.application-groups": [group], "com.apple.security.get-task-allow": true,
+      ],
+      [
+        "com.apple.security.application-groups": [group],
+        "com.apple.security.get-task-allow": false,
+      ],
+      ["com.apple.security.application-groups": ["OTHERTEAM.com.harper.camera-bar"]],
+      ["com.apple.security.application-groups": [group, "another-group"]],
+      ["com.apple.security.application-groups": group],
+      [:],
+    ]
+    for entitlements in invalid {
+      let data = try PropertyListSerialization.data(
+        fromPropertyList: entitlements, format: .xml, options: 0)
+      var rejected = false
+      do { try validateReleaseEntitlements(data, appGroup: group) } catch { rejected = true }
+      try require(
+        rejected, "Accepted distribution entitlements with debugger access or incorrect groups")
+    }
+    var rejectedMalformed = false
+    do { try validateReleaseEntitlements(Data("not a plist".utf8), appGroup: group) } catch {
+      rejectedMalformed = true
+    }
+    try require(rejectedMalformed, "Accepted malformed entitlement data")
+  }
+
 }
