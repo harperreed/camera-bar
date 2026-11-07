@@ -4,7 +4,7 @@ Doctor Biz approved signing, Apple notarization, and GitHub Release publication 
 
 ## Design
 
-- Run `scripts/check` on GitHub's macOS 26 runner for branch pushes, pull requests, version tags, and manual validation.
+- Run `scripts/check --ci` on GitHub's macOS 26 runner for branch pushes, pull requests, version tags, and manual validation. Keep graphics-dependent RTSP/UI tests in the full local `scripts/check` suite.
 - After checks pass, `vMAJOR.MINOR.PATCH` tags build a universal Release app with matching app/widget versions. Manual dispatch exercises signing and notarization without publishing a release.
 - Import the Developer ID identity into a disposable keychain. Read passwords in memory, restrict private-key access to codesign, restore the search list, and delete temporary credentials on success and failure.
 - Use the team's macOS App Group, hardened runtime, and secure timestamps. Submit the ZIP to Apple, require Accepted status, staple and verify the ticket, then package the final ZIP and SHA-256 checksum.
@@ -20,7 +20,7 @@ Doctor Biz approved signing, Apple notarization, and GitHub Release publication 
 
 ## State
 
-- Release implementation and independent reviews are complete. Local notarization passed. On 2026-11-07, Doctor Biz requested a release tag; proceeding with the recommended hosted/local test split, then verifying GitHub signing/notarization and publishing `v1.0.0` through its tag workflow.
+- Released `v1.0.0` on 2026-11-07 from commit `9b72f0b08975627346e0686dfed518de60bf84bf`. GitHub checks, signing, notarization, and publication all passed. Downloaded release assets independently passed checksum, strict deep signature, stapled-ticket, and Gatekeeper checks. App version is `1.0.0`, build `9`.
 - Starting commit: `b5fa0bc7a6887248b4c2e0ff11a35728adb59e44`.
 - Compaction count: 1.
 - Local widget gallery activation remains outside the evidence from signing/build checks.
@@ -36,3 +36,6 @@ Doctor Biz approved signing, Apple notarization, and GitHub Release publication 
 - Local RTSP rerun decoded real frames, including low-rate and sparse streams, but six tests that write Keychain credentials failed with `-25308` (user interaction not allowed). The default keychain still points to the original login keychain; `SecKeychainGetStatus` returned flags `2` (readable, locked). This is not a passing full suite. Unlock the login keychain before retrying those checks; no unlocking or credential-policy change attempted.
 - Pending decision: hosted test split versus GPU runner. Pending verification: full local suite with unlocked login keychain, successful hosted signing/notarization run under the chosen test policy, and manual widget gallery check.
 - 2026-11-07 follow-up supersedes the pending hosted-test decision: Doctor Biz said “did you run it on github? tag a release.” Treating that as approval to proceed with the proposed split, stated explicitly in commentary. Default `scripts/check` retains every local test; `scripts/check --ci` runs core, service, release-tool, lint, and build checks on GitHub. Local login Keychain remains locked, so no fresh full local-suite success is claimed.
+- Hosted/local split received independent spec and quality approval. Manual run https://github.com/harperreed/camera-bar/actions/runs/42381673232 passed all hosted checks and signing/notarization before tagging. Apple submission `634c7802-6064-4ae1-b32f-468ad1167c34` was Accepted; stapler and Gatekeeper passed on the runner.
+- Pushed annotated tag `v1.0.0` at the verified commit. Tag run https://github.com/harperreed/camera-bar/actions/runs/42381985737 passed checks, sign, and publish jobs and created https://github.com/harperreed/camera-bar/releases/tag/v1.0.0 with `CameraBar-1.0.0.zip` and its SHA-256 file. Downloaded verification evidence is under `.build/release-validation/v1.0.0/`.
+- Automation and requested release are complete. Remaining product verification limits: no fresh full local RTSP/UI run with an unlocked login Keychain, and no manual desktop widget gallery verification. These are distinct from the successful hosted checks and notarized distribution validation.
