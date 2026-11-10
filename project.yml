@@ -33,6 +33,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.harper.camera-bar
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SWIFT_OBJC_BRIDGING_HEADER: CameraBar/CameraBar-Bridging-Header.h
         HEADER_SEARCH_PATHS: ["$(inherited)", "$(BUILT_PRODUCTS_DIR)/VLCKit.framework/Headers"]
         INFOPLIST_FILE: CameraBar/Info.plist
@@ -56,7 +57,7 @@ targets:
     sources:
       - CameraBarTests
       - path: CameraBar
-        excludes: [CameraBarApp.swift, Views.swift, Info.plist, CameraBar.entitlements]
+        excludes: [CameraBarApp.swift, Views.swift, Info.plist, CameraBar.entitlements, Assets.xcassets]
       - Shared
     dependencies:
       - package: CameraBarCore

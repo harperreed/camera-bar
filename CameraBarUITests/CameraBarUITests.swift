@@ -92,9 +92,11 @@ final class CameraBarUITests: XCTestCase {
     try openViewer()
     let settings = app.buttons["Camera settings"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
+    if initiallyEmpty { attach(app.popovers.firstMatch, name: "Empty viewer") }
     settings.click()
     try addCamera(app, name: name + " A")
     try addCamera(app, name: name + " B")
+    attach(app.windows["Camera Bar Settings"], name: "Camera settings")
     app.buttons["Select \(name) B"].click()
     app.buttons["Show viewer"].click()
     XCTAssertTrue(app.staticTexts["Live · muted"].waitForExistence(timeout: 20))
@@ -123,6 +125,8 @@ final class CameraBarUITests: XCTestCase {
     app.buttons["Show viewer"].click()
     XCTAssertTrue(app.staticTexts["Camera unavailable"].firstMatch.waitForExistence(timeout: 20))
     XCTAssertTrue(app.buttons["Retry"].exists)
+    XCTAssertTrue(app.buttons["Retry"].isHittable)
+    attach(app.popovers.firstMatch, name: "Unavailable camera")
     app.buttons["Camera settings"].click()
     removeCamera(app, name: name + " Edited")
     removeCamera(app, name: name + " A")
@@ -130,6 +134,14 @@ final class CameraBarUITests: XCTestCase {
       app.buttons["Show viewer"].click()
       XCTAssertTrue(app.staticTexts["Your camera, one click away"].waitForExistence(timeout: 5))
     }
+  }
+
+  @MainActor
+  private func attach(_ element: XCUIElement, name: String) {
+    let screenshot = XCTAttachment(screenshot: element.screenshot())
+    screenshot.name = name
+    screenshot.lifetime = .keepAlways
+    add(screenshot)
   }
 
   @MainActor
@@ -144,6 +156,8 @@ final class CameraBarUITests: XCTestCase {
     add.click()
     let nameField = app.textFields["Camera name"]
     XCTAssertTrue(nameField.waitForExistence(timeout: 5))
+    XCTAssertFalse(app.buttons["Save camera"].isEnabled)
+    attach(app.windows["Camera Bar Settings"], name: "Camera editor")
     nameField.click()
     nameField.typeText(name)
     let address = app.secureTextFields["RTSP address"]
