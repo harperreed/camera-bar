@@ -14,7 +14,7 @@ scripts/build
 open .build/xcode/Build/Products/Debug/CameraBar.app
 ```
 
-The build script downloads stable VLCKit 3.7.3 from VideoLAN and verifies its pinned SHA-256 before extraction. The app bundles VLCKit; VLC does not need to be installed. `scripts/build --help` lists signing options; `scripts/build --signed DEVELOPMENT_TEAM=YOUR_TEAM_ID` uses normal development signing. Build outputs and large dependencies stay in `.build/` and `Vendor/`; `project.yml` generates the checked-in `CameraBar.xcodeproj`.
+The build script downloads stable VLCKit 3.7.3 and Sparkle 2.10.1 and verifies their pinned SHA-256 hashes before extraction. The app bundles both frameworks; VLC does not need to be installed. `scripts/build --help` lists signing options; `scripts/build --signed DEVELOPMENT_TEAM=YOUR_TEAM_ID` uses normal development signing. Build outputs and large dependencies stay in `.build/` and `Vendor/`; `project.yml` generates the checked-in `CameraBar.xcodeproj`.
 
 Click the monitor icon in the menu bar, open settings, and add your camera's RTSP address. Complete addresses, including passwords and query tokens, stay in Keychain. The catalog stores only camera IDs, names, and selection under `~/Library/Application Support/CameraBar/`. A camera's display name appears in the widget; do not put passwords in names.
 
@@ -50,7 +50,9 @@ This command creates a local build without a secure timestamp or notarization. B
 
 ## GitHub releases
 
-GitHub Actions runs `scripts/check --ci` on branch pushes, pull requests, version tags, and manual runs. Hosted checks cover formatting, shell and workflow validation, release tools, core tests, all six native Keychain/file service tests, and the app build. Real VLCKit playback and UI tests remain in the full local `scripts/check` suite because standard hosted macOS runners lack the accelerated OpenGL output this VLCKit build requires. A successful tag run builds a universal Intel/Apple Silicon Release app, signs the app and widget with Developer ID and hardened runtime, notarizes it with Apple, staples the ticket, and verifies Gatekeeper acceptance. The release contains `CameraBar-VERSION.zip` and its `.sha256` checksum. Both bundles use the tag version and the Actions run number as their build number.
+Starting with 1.1.0, **Check for Updates…** in camera settings and the application menu opens Sparkle's standard update interface. Sparkle asks whether to check automatically on the second launch. Updates come from the public GitHub Releases feed; both the feed and update archive require Ed25519 signatures. Archives are verified before extraction, and installed releases retain Developer ID signing and notarization. No GitHub token or camera credentials are sent to the update service. Users of 1.0.x must install their first Sparkle-enabled version manually.
+
+GitHub Actions runs `scripts/check --ci` on branch pushes, pull requests, version tags, and manual runs. Hosted checks cover formatting, shell and workflow validation, release tools, core tests, native Keychain/file service tests and real Sparkle startup, and the app build. Real VLCKit playback and UI tests remain in the full local `scripts/check` suite because standard hosted macOS runners lack the accelerated OpenGL output this VLCKit build requires. A successful tag run builds a universal Intel/Apple Silicon Release app, signs the app, widget, and nested Sparkle helpers with Developer ID and hardened runtime, notarizes it with Apple, staples the ticket, and verifies Gatekeeper acceptance. The release contains `CameraBar-VERSION.zip`, its `.sha256` checksum, and signed `appcast.xml`. Each feed points to its immutable version-tagged ZIP; the app reads the feed attached to the latest release. The feed is generated after stapling, with no delta updates. Both bundles use the tag version and the Actions run number as their build number.
 
 Set these repository **Actions secrets** before running the signing job:
 
@@ -63,21 +65,22 @@ Set these repository **Actions secrets** before running the signing job:
 | `APPLE_API_KEY_ID` | App Store Connect team API key ID authorized for notarization |
 | `APPLE_API_ISSUER_ID` | Issuer ID for that team API key |
 | `APPLE_API_PRIVATE_KEY` | Complete `.p8` private key text, including its PEM header and footer |
+| `SPARKLE_PRIVATE_KEY` | Exported Sparkle Ed25519 private key matching `SUPublicEDKey` in the app's Info.plist |
 
-Keep the certificate and API credentials outside Git. Upload secrets through GitHub's settings or `gh secret set NAME < /path/to/secret-file`; never put their values in shell commands or logs. The release tool reads the archive password in memory, imports a nonextractable key with access restricted to `codesign`, and deletes its temporary keychain and notarization key after success or failure. Child build tools do not inherit the Apple secret environment. Pull requests run checks without signing secrets. Only the publication job has repository write access.
+Keep the certificate and API credentials outside Git. Upload secrets through GitHub's settings or `gh secret set NAME < /path/to/secret-file`; never put their values in shell commands or logs. The release tool reads the archive password in memory, imports a nonextractable key with access restricted to `codesign`, and deletes its temporary keychain and notarization key after success or failure. Child build tools do not inherit the Apple or Sparkle secret environment. Sparkle signing reads its key from an owner-only temporary file, which is removed after success or failure. Pull requests run checks without signing secrets. Only the publication job has repository write access.
 
-First run **Actions → Build and release → Run workflow** on the branch you intend to ship. Manual runs use version `1.0.0`, sign and notarize the app, and upload a `notarized-release` artifact; they never publish a GitHub Release. Download it and verify the checksum, then exercise the viewer and desktop widget on a Mac. Local gallery rendering still needs that manual check.
+First run **Actions → Build and release → Run workflow** on the branch you intend to ship. Manual runs use `MARKETING_VERSION` from `project.yml`, sign and notarize the app, and upload a `notarized-release` artifact; they never publish a GitHub Release. Download it and verify the checksum, then exercise the viewer and desktop widget on a Mac. Local gallery rendering still needs that manual check.
 
 To publish a checked commit, push a strict `vMAJOR.MINOR.PATCH` tag:
 
 ```sh
-git tag v1.0.0
-git push origin v1.0.0
+git tag v1.1.0
+git push origin v1.1.0
 ```
 
-Prerelease suffixes and leading zeros are rejected. Existing releases are never overwritten. A signing, notarization, or verification failure prevents publication. Apple requires current Developer Program agreements; an agreement-related HTTP 403 must be resolved in the developer account before rerunning the failed job. Release logs remain available as an Actions artifact for seven days; signing keychains, PKCS#12 archives, and `.p8` keys are excluded. Final ZIPs and checksums remain as workflow artifacts for fourteen days and as assets on tagged releases.
+Prerelease suffixes and leading zeros are rejected. Existing releases are never overwritten. A signing, notarization, or verification failure prevents publication. Apple requires current Developer Program agreements; an agreement-related HTTP 403 must be resolved in the developer account before rerunning the failed job. Release logs remain available as an Actions artifact for seven days; signing keychains, PKCS#12 archives, and `.p8` keys are excluded. Final ZIPs, checksums, and appcasts remain as workflow artifacts for fourteen days and as assets on tagged releases.
 
-For local release validation, export the same seven secrets into the environment and run `scripts/release-build v1.0.0 1`. It creates only the final notarized ZIP and checksum in `.build/release/`, with logs in `.build/release-*.log`. Move any previous ZIP before repeating the same version. `scripts/test-release` checks input validation and real temporary-keychain cleanup without credentials or launching the app.
+For local release validation, export the same eight secrets into the environment and run `scripts/release-build v1.1.0 BUILD_NUMBER`, choosing a build number greater than the last published release. It creates the final notarized ZIP, checksum, and signed appcast in `.build/release/`, with logs in `.build/release-*.log`. Move any previous ZIP before repeating the same version. `scripts/test-release` checks input validation, secret isolation, real temporary-keychain cleanup, nested Sparkle signatures, and a real app archive/feed signed with disposable Ed25519 keys. It verifies archive signatures independently with CryptoKit and feed signatures with Sparkle, including rejection of altered content.
 
 When rotating credentials, replace the certificate archive, password, and signing fingerprint together; replace the API key ID, issuer, and private key together. Run manual validation with the replacements before revoking the old credentials, unless they are compromised. A team change also changes the shared App Group and needs migration planning before release.
 
@@ -103,3 +106,5 @@ A fresh Release build also reports warnings in VLCKit's bundled headers about fr
 ## Dependency license
 
 VLCKit 3.7.3 is dynamically linked and distributed under LGPL 2.1 or later; its bundled license is in `THIRD_PARTY_NOTICES.txt`. Source and build instructions are available from [VideoLAN VLCKit](https://code.videolan.org/videolan/VLCKit) and [VLC](https://code.videolan.org/videolan/vlc). The pinned binary archive is `VLCKit-3.7.3-319ed2c0-79128878.tar.xz`, SHA-256 `019afdae4e2e2d0f3ac325fac8f7ba0af25dca70b9d157df7d60db88e0be8e5d`. Preserve the license and applicable source/relinking obligations when distributing a signed app; release packages include the bundled license.
+
+Sparkle 2.10.1 uses the MIT license, with bundled third-party notices included in `THIRD_PARTY_NOTICES.txt`. Source and update documentation are available from [Sparkle](https://github.com/sparkle-project/Sparkle). The pinned archive is `Sparkle-2.10.1.tar.xz`, SHA-256 `1a856d2a9edb8e628de88121d7be04cf0e2167f8641650b78fca00b14244cf27`. Keep the Ed25519 signing key stable across releases; changing it requires Sparkle's documented key-rotation procedure so installed apps can trust the transition.

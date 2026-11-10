@@ -1,11 +1,11 @@
 #!/bin/bash
-# ABOUTME: Checks release inputs and real disposable-keychain cleanup without credentials.
+# ABOUTME: Checks release inputs, disposable-keychain cleanup, and real Sparkle signatures.
 # ABOUTME: Compiles the release command too, catching type errors before signing jobs run.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 if [[ "${1:-}" == --help ]]; then
   echo 'Usage: scripts/test-release'
-  echo 'Requires macOS and Xcode. Creates and deletes disposable keychains; does not build or launch the app.'
+  echo 'Requires macOS, Xcode, and scripts/bootstrap dependencies. Uses disposable keys and a tiny real app archive.'
   exit 0
 fi
 mkdir -p .build

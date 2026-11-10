@@ -33,5 +33,15 @@
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>SUFeedURL</key>
+	<string>https://github.com/harperreed/camera-bar/releases/latest/download/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>PaSB4NO6pnCukyyNPnwMp6fWp9rXVQCJXzT4H/hoRh4=</string>
+	<key>SUVerifyUpdateBeforeExtraction</key>
+	<true/>
+	<key>SURequireSignedFeed</key>
+	<true/>
+	<key>SUSignedFeedFailureExpirationInterval</key>
+	<integer>0</integer>
 </dict>
 </plist>

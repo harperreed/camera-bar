@@ -2,6 +2,7 @@
 // ABOUTME: Routes widget links to the viewer and stops playback on termination.
 import AppKit
 import CameraBarCore
+import Sparkle
 import SwiftUI
 import WidgetKit
 
@@ -12,6 +13,8 @@ final class CameraBarApp: NSObject, NSApplicationDelegate, NSPopoverDelegate {
   private let popover = NSPopover()
   private var settingsWindow: NSWindow?
   private var controller: AppController!
+  private let updaterController = SPUStandardUpdaterController(
+    startingUpdater: false, updaterDelegate: nil, userDriverDelegate: nil)
   private var pendingViewer = false
   private static var delegate: CameraBarApp?
 
@@ -24,6 +27,7 @@ final class CameraBarApp: NSObject, NSApplicationDelegate, NSPopoverDelegate {
   }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    updaterController.startUpdater()
     installMenu()
     controller = AppController()
     controller.showSettings = { [weak self] in self?.openSettings() }
@@ -53,6 +57,11 @@ final class CameraBarApp: NSObject, NSApplicationDelegate, NSPopoverDelegate {
   private func installMenu() {
     let menu = NSMenu()
     let application = NSMenu()
+    let updates = application.addItem(
+      withTitle: "Check for Updates…",
+      action: #selector(SPUStandardUpdaterController.checkForUpdates(_:)), keyEquivalent: "")
+    updates.target = updaterController
+    application.addItem(.separator())
     application.addItem(
       withTitle: "Quit Camera Bar", action: #selector(NSApplication.terminate(_:)),
       keyEquivalent: "q")
@@ -115,7 +124,7 @@ final class CameraBarApp: NSObject, NSApplicationDelegate, NSPopoverDelegate {
       window.title = "Camera Bar Settings"
       window.isReleasedWhenClosed = false
       window.contentViewController = NSHostingController(
-        rootView: SettingsRoot(controller: controller))
+        rootView: SettingsRoot(controller: controller, updater: updaterController.updater))
       window.center()
       settingsWindow = window
     }

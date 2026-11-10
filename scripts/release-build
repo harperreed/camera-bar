@@ -5,14 +5,15 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 if [[ "${1:-}" == --help ]]; then
   echo 'Usage: scripts/release-build vMAJOR.MINOR.PATCH BUILD_NUMBER'
-  echo 'Requires Xcode, XcodeGen, and the seven APPLE_* secrets documented in README.md.'
-  echo 'Produces a notarized ZIP and checksum under .build/release; logs: .build/release-*.log.'
+  echo 'Requires Xcode, XcodeGen, the seven APPLE_* secrets and SPARKLE_PRIVATE_KEY documented in README.md.'
+  echo 'Produces a notarized ZIP, checksum and signed appcast under .build/release; logs: .build/release-*.log.'
   exit 0
 fi
 mkdir -p .build
 (
   unset APPLE_CERTIFICATE_P12_BASE64 APPLE_CERTIFICATE_PASSWORD APPLE_SIGNING_IDENTITY APPLE_TEAM_ID
   unset APPLE_API_KEY_ID APPLE_API_ISSUER_ID APPLE_API_PRIVATE_KEY GH_TOKEN GITHUB_TOKEN
+  unset SPARKLE_PRIVATE_KEY
   swiftc scripts/release/Support.swift scripts/release/Main.swift -o .build/release-tool
 )
 exec .build/release-tool "$@"

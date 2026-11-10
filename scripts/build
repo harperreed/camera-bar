@@ -36,6 +36,7 @@ if [[ "$local_sign" == true ]]; then
   done
   # Xcode strips development headers during embedding, invalidating the vendor resource seal.
   sign --force --sign - "$app/Contents/Frameworks/VLCKit.framework"
+  sign --force --sign - "$app/Contents/Frameworks/Sparkle.framework"
   sign --force --sign - --entitlements .build/CameraBarWidget.local.entitlements "$app/Contents/PlugIns/CameraBarWidget.appex"
   sign --force --sign - --entitlements .build/CameraBar.local.entitlements "$app"
   sign --verify --deep --strict "$app"

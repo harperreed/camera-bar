@@ -29,6 +29,7 @@ struct ReleaseCredentials {
   static let names = [
     "APPLE_CERTIFICATE_P12_BASE64", "APPLE_CERTIFICATE_PASSWORD", "APPLE_SIGNING_IDENTITY",
     "APPLE_TEAM_ID", "APPLE_API_KEY_ID", "APPLE_API_ISSUER_ID", "APPLE_API_PRIVATE_KEY",
+    "SPARKLE_PRIVATE_KEY",
   ]
   let values: [String: String]
   init(environment: [String: String]) throws {
@@ -85,7 +86,8 @@ enum SigningKeychain {
 
 func childEnvironment(_ environment: [String: String]) -> [String: String] {
   environment.filter {
-    !$0.key.hasPrefix("APPLE_") && !["GH_TOKEN", "GITHUB_TOKEN"].contains($0.key)
+    !$0.key.hasPrefix("APPLE_")
+      && !["GH_TOKEN", "GITHUB_TOKEN", "SPARKLE_PRIVATE_KEY"].contains($0.key)
   }
 }
 
@@ -207,5 +209,51 @@ func verifyReleaseEntitlements(_ bundle: String, appGroup: String, logPrefix: St
       ["--display", "--arch", architecture, "--entitlements", "-", "--xml", bundle], log: log,
       errorLog: logPrefix + "-" + architecture + "-diagnostics.log")
     try validateReleaseEntitlements(Data(contentsOf: URL(fileURLWithPath: log)), appGroup: appGroup)
+  }
+}
+
+func signSparkleFramework(_ framework: String, identity: String, keychain: String?, log: String)
+  throws
+{
+  var arguments = ["--force", "--sign", identity, "--options", "runtime"]
+  if let keychain { arguments += ["--keychain", keychain, "--timestamp"] }
+  for (index, component) in [
+    "/Versions/B/XPCServices/Installer.xpc", "/Versions/B/XPCServices/Downloader.xpc",
+    "/Versions/B/Autoupdate", "/Versions/B/Updater.app", "",
+  ].enumerated() {
+    let entitlements =
+      component.hasSuffix("Downloader.xpc") ? ["--preserve-metadata=entitlements"] : []
+    try run(
+      "/usr/bin/codesign", arguments + entitlements + [framework + component],
+      log: "\(log)-\(index).log")
+  }
+}
+
+func generateSignedAppcast(archives: String, version: String, privateKey: String, logPrefix: String)
+  throws
+{
+  try withTemporaryDirectory(prefix: "camera-bar-update-key-") { directory in
+    let key = directory.appendingPathComponent("ed25519")
+    guard
+      FileManager.default.createFile(
+        atPath: key.path, contents: Data(privateKey.utf8),
+        attributes: [.posixPermissions: 0o600])
+    else {
+      throw ReleaseFailure(message: "Cannot create temporary update signing key")
+    }
+    let tools = URL(fileURLWithPath: "Vendor/Sparkle/bin").standardizedFileURL
+    try run(
+      tools.appendingPathComponent("generate_appcast").path,
+      [
+        "--ed-key-file", key.path, "--maximum-deltas", "0", "--maximum-versions", "1",
+        "--download-url-prefix",
+        "https://github.com/harperreed/camera-bar/releases/download/v\(version)/",
+        archives,
+      ], log: logPrefix + "-generate.log")
+    try run(
+      tools.appendingPathComponent("sign_update").path,
+      [
+        "--verify", "--ed-key-file", key.path, archives + "/appcast.xml",
+      ], log: logPrefix + "-verify.log")
   }
 }

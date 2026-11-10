@@ -72,7 +72,7 @@ final class CameraBarUITests: XCTestCase {
   }
 
   @MainActor
-  func testCameraLifecycle() throws {
+  func testCameraLifecycle() async throws {
     continueAfterFailure = false
     let app = XCUIApplication()
     restoreRunningApp = app.state != .notRunning
@@ -87,13 +87,17 @@ final class CameraBarUITests: XCTestCase {
     let initiallyEmpty = original.cameras.isEmpty
     let name = "UI Test \(UUID().uuidString)"
     fixtureNames = [name + " A", name + " B", name + " Edited"]
+    app.launchArguments += ["-SUEnableAutomaticChecks", "NO"]
     app.launch()
     didLaunch = true
-    try openViewer()
+    try await openViewer()
     let settings = app.buttons["Camera settings"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
     if initiallyEmpty { attach(app.popovers.firstMatch, name: "Empty viewer") }
     settings.click()
+    let checkForUpdates = app.buttons["Check for Updates…"]
+    XCTAssertTrue(checkForUpdates.waitForExistence(timeout: 5))
+    XCTAssertTrue(checkForUpdates.isEnabled)
     try addCamera(app, name: name + " A")
     try addCamera(app, name: name + " B")
     attach(app.windows["Camera Bar Settings"], name: "Camera settings")
@@ -107,7 +111,7 @@ final class CameraBarUITests: XCTestCase {
     add(screenshot)
 
     app.terminate()
-    try openViewer()
+    try await openViewer()
     XCTAssertTrue(app.staticTexts["Live · muted"].waitForExistence(timeout: 20))
     XCTAssertEqual(app.popUpButtons.firstMatch.value as? String, name + " B")
     app.buttons["Camera settings"].click()
@@ -145,8 +149,18 @@ final class CameraBarUITests: XCTestCase {
   }
 
   @MainActor
-  private func openViewer() throws {
-    NSWorkspace.shared.open(try XCTUnwrap(URL(string: "camerabar://viewer")))
+  private func openViewer() async throws {
+    let applicationURL = Bundle.main.bundleURL.deletingLastPathComponent()
+      .appendingPathComponent("CameraBar.app")
+    XCTAssertTrue(
+      FileManager.default.fileExists(atPath: applicationURL.path), "Built CameraBar.app is missing")
+    let configuration = NSWorkspace.OpenConfiguration()
+    configuration.arguments = ["-SUEnableAutomaticChecks", "NO"]
+    // Target this build even when an installed copy owns the system URL handler.
+    let running = try await NSWorkspace.shared.open(
+      [try XCTUnwrap(URL(string: "camerabar://viewer"))], withApplicationAt: applicationURL,
+      configuration: configuration)
+    XCTAssertEqual(running.bundleURL?.standardizedFileURL, applicationURL.standardizedFileURL)
   }
 
   @MainActor

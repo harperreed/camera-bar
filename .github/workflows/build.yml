@@ -61,9 +61,10 @@ jobs:
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
           APPLE_API_PRIVATE_KEY: ${{ secrets.APPLE_API_PRIVATE_KEY }}
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
         run: |
           if [[ "$RELEASE_EVENT" == workflow_dispatch ]]; then
-            RELEASE_REF=v1.0.0
+            RELEASE_REF="v$(sed -n "s/.*MARKETING_VERSION: '\([^']*\)'.*/\1/p" project.yml)"
           fi
           scripts/release-build "$RELEASE_REF" "$RELEASE_BUILD"
       - name: Preserve release diagnostics
@@ -81,6 +82,7 @@ jobs:
           path: |
             .build/release/CameraBar-*.zip
             .build/release/CameraBar-*.zip.sha256
+            .build/release/appcast.xml
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 14
@@ -102,4 +104,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.ref_name }}
-        run: gh release create "$RELEASE_TAG" release/*.zip release/*.zip.sha256 --verify-tag --generate-notes --title "Camera Bar $RELEASE_TAG"
+        run: gh release create "$RELEASE_TAG" release/*.zip release/*.zip.sha256 release/appcast.xml --verify-tag --generate-notes --title "Camera Bar $RELEASE_TAG"
