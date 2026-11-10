@@ -22,8 +22,11 @@ struct ViewerView: View {
   @ObservedObject var state: CameraState
   var body: some View {
     VStack(spacing: 0) {
-      HStack {
-        Image(systemName: "video.fill").foregroundStyle(.secondary)
+      HStack(spacing: 12) {
+        Image(systemName: "display")
+          .font(.system(size: 18, weight: .medium))
+          .foregroundStyle(MonitorTheme.secondary)
+          .accessibilityHidden(true)
         if state.cameras.isEmpty {
           Text("Camera Bar").font(.headline)
         } else {
@@ -38,45 +41,73 @@ struct ViewerView: View {
             ForEach(state.cameras) { camera in Text(camera.name).tag(Optional(camera.id)) }
           }.labelsHidden().accessibilityLabel("Selected camera")
         }
-        Spacer()
+        Spacer(minLength: 12)
         Button(action: controller.showSettings) { Image(systemName: "gearshape") }
-          .buttonStyle(.plain).help("Camera settings").accessibilityLabel("Camera settings")
-      }.padding(16)
+          .buttonStyle(.borderless).controlSize(.large)
+          .help("Camera settings").accessibilityLabel("Camera settings")
+      }.padding(.horizontal, 20).frame(height: 62)
       ZStack {
-        Color.black
+        MonitorTheme.display
         if state.selectedCamera != nil {
           VideoSurface(engine: controller.engine, isVisible: controller.viewerOpen)
           if !controller.isLive {
-            VStack(spacing: 10) {
-              Image(systemName: "video.slash").font(.system(size: 26)).foregroundStyle(.secondary)
-              Text(controller.status).font(.callout)
-              if controller.status != "Connecting…" { Button("Retry") { controller.restart() } }
-            }.padding(18).background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+            MonitorTheme.display
+            VStack(spacing: 12) {
+              Image(systemName: controller.status == "Connecting…" ? "display" : "wifi.slash")
+                .font(.system(size: 30, weight: .light))
+                .foregroundStyle(MonitorTheme.secondary)
+                .accessibilityHidden(true)
+              Text(controller.status).font(.headline)
+              if controller.status == "Connecting…" {
+                Text("Waiting for the camera’s video.")
+                  .font(.callout).foregroundStyle(MonitorTheme.secondary)
+              } else {
+                Text("Check the camera’s connection or saved address.")
+                  .font(.callout).foregroundStyle(MonitorTheme.secondary)
+                Button("Retry") { controller.restart() }.controlSize(.large)
+              }
+            }.padding(24).multilineTextAlignment(.center)
           }
         } else {
           VStack(spacing: 12) {
-            Image(systemName: "video.badge.plus").font(.system(size: 32)).foregroundStyle(
-              .secondary)
+            Image(systemName: "display")
+              .font(.system(size: 36, weight: .ultraLight))
+              .foregroundStyle(MonitorTheme.secondary).accessibilityHidden(true)
             Text("Your camera, one click away").font(.headline)
-            Text("Add an RTSP camera to get started.").foregroundStyle(.secondary)
-            Button("Add camera", action: controller.showSettings)
-          }
+            Text("Add an RTSP camera to get started.")
+              .font(.callout).foregroundStyle(MonitorTheme.secondary)
+            Button("Add camera", action: controller.showSettings).controlSize(.large)
+          }.padding(24)
         }
-      }.frame(width: 480, height: 270)
-      HStack {
-        Circle().fill(controller.isLive ? Color.green : Color.secondary).frame(width: 6, height: 6)
-        Text(controller.status).font(.caption).foregroundStyle(.secondary)
+      }.frame(width: 464, height: 261)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .overlay {
+          RoundedRectangle(cornerRadius: 10).strokeBorder(MonitorTheme.edge, lineWidth: 1)
+        }
+        .padding(.horizontal, 16)
+      HStack(spacing: 8) {
+        Circle().fill(controller.isLive ? MonitorTheme.live : MonitorTheme.secondary.opacity(0.5))
+          .frame(width: 6, height: 6).accessibilityHidden(true)
+        Text(controller.status).font(.caption).foregroundStyle(MonitorTheme.secondary)
         Spacer()
-        Button("Quit") { NSApp.terminate(nil) }.buttonStyle(.plain).font(.caption)
-      }.padding(14)
+        Button("Quit") { NSApp.terminate(nil) }
+          .buttonStyle(.borderless).font(.caption).foregroundStyle(MonitorTheme.secondary)
+      }.padding(.horizontal, 20).frame(height: 42)
       if let error = controller.error {
-        Text(error).font(.caption).foregroundStyle(.orange).padding([.horizontal, .bottom])
+        Text(error).font(.caption).foregroundStyle(.orange)
+          .frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 20).padding(
+            .bottom, 8)
       }
       if controller.widgetUnavailable {
-        Text("Widget sharing is unavailable. See setup instructions.")
-          .font(.caption).foregroundStyle(.secondary).padding([.horizontal, .bottom])
+        HStack(alignment: .top, spacing: 7) {
+          Image(systemName: "info.circle").accessibilityHidden(true)
+          Text("Widget sharing is unavailable. See setup instructions.")
+        }.font(.caption).foregroundStyle(MonitorTheme.secondary)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .padding(.horizontal, 20).padding(.bottom, 14)
       }
-    }.frame(width: 480, height: 430, alignment: .top)
+    }.frame(width: 496).fixedSize(horizontal: false, vertical: true)
+      .foregroundStyle(MonitorTheme.text).background(MonitorTheme.housing)
   }
 }
 
@@ -123,24 +154,34 @@ struct CameraSettings: View {
     VStack(alignment: .leading, spacing: 16) {
       HStack {
         VStack(alignment: .leading, spacing: 4) {
-          Text("Cameras").font(.title2.bold())
-          Text("One selected camera powers the viewer and widget.").foregroundStyle(.secondary)
+          Text("Cameras").font(.system(size: 24, weight: .semibold))
+          Text("One camera for your viewer and widget.")
+            .font(.callout).foregroundStyle(MonitorTheme.secondary)
         }
         Spacer()
-        Button("Add camera") { editor = CameraEditorModel() }
+        Button("Add camera") { editor = CameraEditorModel() }.controlSize(.large)
       }
       if state.cameras.isEmpty {
         ContentUnavailableView(
-          "No cameras yet", systemImage: "video", description: Text("Add a named RTSP address."))
+          "No cameras yet", systemImage: "display", description: Text("Add a named RTSP address.")
+        )
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
       } else {
         List(state.cameras) { camera in
           HStack(spacing: 12) {
             Image(
-              systemName: camera.id == state.selectedCamera?.id ? "checkmark.circle.fill" : "video"
+              systemName: camera.id == state.selectedCamera?.id
+                ? "checkmark.circle.fill" : "display"
             )
             .foregroundStyle(
-              camera.id == state.selectedCamera?.id ? Color.accentColor : Color.secondary)
-            Text(camera.name)
+              camera.id == state.selectedCamera?.id ? MonitorTheme.text : MonitorTheme.secondary)
+            VStack(alignment: .leading, spacing: 3) {
+              Text(camera.name).font(.body.weight(.medium)).lineLimit(1)
+              if camera.id == state.selectedCamera?.id {
+                Text("Selected for viewer & widget").font(.caption)
+                  .foregroundStyle(MonitorTheme.secondary)
+              }
+            }
             Spacer()
             if camera.id != state.selectedCamera?.id {
               Button("Select") { _ = controller.perform { try state.select(id: camera.id) } }
@@ -160,17 +201,23 @@ struct CameraSettings: View {
               Image(systemName: "trash")
             }
             .accessibilityLabel("Remove \(camera.name)")
-          }.padding(.vertical, 6)
-        }.listStyle(.inset)
+          }.padding(.vertical, 10)
+        }.listStyle(.inset).scrollContentBackground(.hidden)
+          .background(MonitorTheme.display, in: RoundedRectangle(cornerRadius: 10))
+          .overlay {
+            RoundedRectangle(cornerRadius: 10).strokeBorder(MonitorTheme.edge, lineWidth: 1)
+              .allowsHitTesting(false)
+          }
       }
       if let error = controller.error { Text(error).foregroundStyle(.orange).font(.callout) }
       HStack {
-        Text("Addresses stay in Keychain. Keep Camera Bar running for widget updates.")
+        Text("Addresses stay in Keychain.\nKeep Camera Bar running for widget updates.")
           .font(.caption).foregroundStyle(.secondary)
         Spacer()
         Button("Show viewer", action: controller.showViewer)
       }
-    }.padding(24).frame(width: 580, height: 420)
+    }.padding(24).frame(width: 600, height: 440)
+      .foregroundStyle(MonitorTheme.text).background(MonitorTheme.housing)
       .sheet(item: $editor) { draft in
         CameraEditor(controller: controller, state: state, draft: draft)
       }
@@ -209,14 +256,17 @@ struct CameraEditor: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 18) {
-      Text(draft.camera == nil ? "Add camera" : "Edit camera").font(.title2.bold())
+      Text(draft.camera == nil ? "Add camera" : "Edit camera")
+        .font(.system(size: 24, weight: .semibold))
       Form {
         TextField("Name", text: $draft.name).accessibilityLabel("Camera name")
         SecureField("RTSP address", text: $draft.address).accessibilityLabel("RTSP address")
           .help("rtsp://username:password@camera-host/path")
       }
-      Text("Use the RTSP address provided by your camera. Credentials are saved in Keychain.")
-        .font(.caption).foregroundStyle(.secondary)
+      Label(
+        "Use your camera’s RTSP address. Credentials are saved in Keychain.", systemImage: "lock"
+      )
+      .font(.caption).foregroundStyle(.secondary)
       if let error = controller.error { Text(error).font(.caption).foregroundStyle(.orange) }
       HStack {
         Spacer()
@@ -234,6 +284,7 @@ struct CameraEditor: View {
           draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             || draft.address.isEmpty)
       }
-    }.padding(24).frame(width: 430)
+    }.padding(28).frame(width: 460)
+      .foregroundStyle(MonitorTheme.text).background(MonitorTheme.housing)
   }
 }

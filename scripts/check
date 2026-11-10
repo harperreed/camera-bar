@@ -40,7 +40,7 @@ if [[ "$mode" == ci ]]; then
   echo 'CI scope: service tests and build; real RTSP playback and UI checks remain local.'
 fi
 run bootstrap scripts/bootstrap
-run format swift format lint --strict --recursive Package.swift Sources Tests CameraBar CameraBarTests CameraBarUITests CameraBarWidget Shared scripts/release
+run format swift format lint --strict --recursive Package.swift Sources Tests CameraBar CameraBarTests CameraBarUITests CameraBarWidget Shared scripts/release scripts/generate-icons.swift
 run shell check_shell
 run workflow actionlint
 run release-tools scripts/test-release

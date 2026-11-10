@@ -1,5 +1,7 @@
 # Camera Bar
 
+![Camera Bar monitor icon](CameraBar/Assets.xcassets/AppIcon.appiconset/monitor-128@1x.png)
+
 A small macOS menu bar RTSP viewer with a native WidgetKit snapshot widget. Pick one camera; the viewer and widget use that selection. Playback is muted. No recording, grids, or cloud service.
 
 ## Build and run
@@ -14,7 +16,9 @@ open .build/xcode/Build/Products/Debug/CameraBar.app
 
 The build script downloads stable VLCKit 3.7.3 from VideoLAN and verifies its pinned SHA-256 before extraction. The app bundles VLCKit; VLC does not need to be installed. `scripts/build --help` lists signing options; `scripts/build --signed DEVELOPMENT_TEAM=YOUR_TEAM_ID` uses normal development signing. Build outputs and large dependencies stay in `.build/` and `Vendor/`; `project.yml` generates the checked-in `CameraBar.xcodeproj`.
 
-Click the camera icon in the menu bar, open settings, and add your camera's RTSP address. Complete addresses, including passwords and query tokens, stay in Keychain. The catalog stores only camera IDs, names, and selection under `~/Library/Application Support/CameraBar/`. A camera's display name appears in the widget; do not put passwords in names.
+Click the monitor icon in the menu bar, open settings, and add your camera's RTSP address. Complete addresses, including passwords and query tokens, stay in Keychain. The catalog stores only camera IDs, names, and selection under `~/Library/Application Support/CameraBar/`. A camera's display name appears in the widget; do not put passwords in names.
+
+The app icon and template menu bar mark are original vector drawings rendered with AppKit. Run `swift scripts/generate-icons.swift` after changing the artwork; commit the generated `CameraBar/Assets.xcassets` files with the script. Normal builds use the checked-in assets.
 
 For UniFi Protect's plain RTSP output, use `rtsp://<console>:7447/<stream-token>`. Port `7441` serves RTSPS, so changing only `rtsps://` to `rtsp://` will not work. Keep the same stream token and omit `?enableSrtp` when using the plain RTSP endpoint. Camera Bar currently accepts plain RTSP only. See [Ubiquiti's port reference](https://help.ui.com/hc/en-us/articles/218506997-Required-Ports-Reference).
 

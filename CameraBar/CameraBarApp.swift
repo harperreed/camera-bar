@@ -29,13 +29,12 @@ final class CameraBarApp: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     controller.showSettings = { [weak self] in self?.openSettings() }
     controller.showViewer = { [weak self] in self?.openViewer() }
     statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-    statusItem.button?.image = NSImage(
-      systemSymbolName: "video", accessibilityDescription: "Camera Bar")
+    statusItem.button?.image = NSImage(named: "MenuBar")
     statusItem.button?.setAccessibilityLabel("Camera Bar")
     statusItem.button?.target = self
     statusItem.button?.action = #selector(toggleViewer)
     popover.behavior = .transient
-    popover.contentSize = NSSize(width: 480, height: 430)
+    popover.contentSize = NSSize(width: 496, height: 365)
     popover.delegate = self
     popover.contentViewController = NSHostingController(
       rootView: ViewerRoot(controller: controller))
@@ -111,7 +110,7 @@ final class CameraBarApp: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     popover.performClose(nil)
     if settingsWindow == nil {
       let window = NSWindow(
-        contentRect: NSRect(x: 0, y: 0, width: 580, height: 420),
+        contentRect: NSRect(x: 0, y: 0, width: 600, height: 440),
         styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
       window.title = "Camera Bar Settings"
       window.isReleasedWhenClosed = false
