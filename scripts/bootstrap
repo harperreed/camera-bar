@@ -1,11 +1,11 @@
 #!/bin/bash
-# ABOUTME: Downloads the pinned stable VLCKit binary and verifies its archive hash.
+# ABOUTME: Downloads pinned VLCKit and Sparkle binaries and verifies their archive hashes.
 # ABOUTME: Regenerates the native Xcode project with XcodeGen.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 if [[ "${1:-}" == --help ]]; then
   echo 'Usage: scripts/bootstrap'
-  echo 'Requires XcodeGen and curl. Downloads verified VLCKit 3.7.3 into ignored Vendor/.'
+  echo 'Requires XcodeGen and curl. Downloads verified VLCKit 3.7.3 and Sparkle 2.10.1 into ignored Vendor/.'
   exit 0
 fi
 command -v xcodegen >/dev/null || { echo 'Install XcodeGen (brew install xcodegen), then rerun.' >&2; exit 1; }
@@ -21,6 +21,18 @@ if [[ ! -d "$framework" ]]; then
   actual=$(shasum -a 256 "$archive" | awk '{print $1}')
   [[ "$actual" == "$checksum" ]] || { echo "VLCKit checksum mismatch: $archive. Remove it and retry." >&2; exit 1; }
   tar -xJf "$archive" -C Vendor
+fi
+archive=.build/dependencies/Sparkle-2.10.1.tar.xz
+checksum=1a856d2a9edb8e628de88121d7be04cf0e2167f8641650b78fca00b14244cf27
+if [[ ! -d Vendor/Sparkle/Sparkle.framework || ! -x Vendor/Sparkle/bin/generate_appcast ]]; then
+  mkdir -p .build/dependencies Vendor/Sparkle
+  if [[ ! -f "$archive" ]]; then
+    curl --fail --location --retry 3 'https://github.com/sparkle-project/Sparkle/releases/download/2.10.1/Sparkle-2.10.1.tar.xz' --output "$archive.partial"
+    mv "$archive.partial" "$archive"
+  fi
+  actual=$(shasum -a 256 "$archive" | awk '{print $1}')
+  [[ "$actual" == "$checksum" ]] || { echo "Sparkle checksum mismatch: $archive. Remove it and retry." >&2; exit 1; }
+  tar -xJf "$archive" -C Vendor/Sparkle Sparkle.framework bin LICENSE
 fi
 xcodegen generate
 echo 'Dependencies and Xcode project are ready.'

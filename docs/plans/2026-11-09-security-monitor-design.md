@@ -20,7 +20,7 @@
 
 ## Status
 
-- Visual implementation complete; actual app UI verification pending macOS automation approval.
+- Visual implementation complete; actual app UI verification passed during the Sparkle follow-up on 2026-11-09.
 - Work branch: feat/security-monitor-design, same checkout.
 - Compaction count: 0 for this implementation phase.
 - Added original AppKit-drawn monitor artwork, all ten macOS icon sizes and a template menu mark. The compiled app contains AppIcon.icns and correct bundle icon metadata.
@@ -29,4 +29,4 @@
 - Verification on 2026-11-09: 18 core tests and all 14 real native/RTSP tests passed. Canonical CLI, formatting, shell, workflow and release-tool checks passed. Final scripts/build and strict deep signature verification passed. Existing VLCKit and host Xcode diagnostics remain.
 - scripts/check reached the UI stage, but XCTest could not initialize: macOS required authentication for “Enable UI Automation.” Two attempts timed out before executing testCameraLifecycle. Doctor Biz has been asked to approve the system prompt; do not claim a passing full suite or actual app screenshot review yet.
 - Temporary renders of the real widget content at small/medium sizes, with a real RTSP fixture frame, were visually reviewed under .build/design-previews/. These are visual previews, not desktop WidgetKit activation evidence. No application mock mode was added.
-- Next: approve macOS UI automation, rerun scripts/test-rtsp --ui, export and inspect scoped screenshot attachments, then mark UI verification complete. No new release tag requested or published.
+- Follow-up: Doctor Biz approved automation. The test needed to explicitly target the built app because the installed copy owned the URL handler. The corrected lifecycle passed and its scoped screenshot attachments were inspected under .build/sparkle-ui-success/. Doctor Biz subsequently requested publication; v1.0.1 passed GitHub signing/notarization and independent downloaded-artifact verification. Desktop widget gallery rendering remains unverified.

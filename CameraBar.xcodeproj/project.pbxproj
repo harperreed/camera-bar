@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		04B160F2E04180E42752B82E /* MonitorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE28803311DAF4F159BBB83 /* MonitorTheme.swift */; };
+		06909E03D75767D337638FE9 /* UpdateAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3D119E55CDDFF1F33C37A /* UpdateAvailability.swift */; };
 		12BC44C8BBADB0F8E7825E8A /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2883E5496393E470234F8377 /* AppController.swift */; };
 		205D4E0ED53F41770D21824C /* MonitorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE28803311DAF4F159BBB83 /* MonitorTheme.swift */; };
 		2633B3B1FD991A7B04FBBB90 /* CameraBarCore in Frameworks */ = {isa = PBXBuildFile; productRef = C40EF52C1D41BE9CDED05BFD /* CameraBarCore */; };
@@ -21,24 +22,29 @@
 		57504DDDF2AE4107DC358025 /* SnapshotBoundary.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8E946FD95FBC7359885831 /* SnapshotBoundary.m */; };
 		5B149B4FF4F26335E37E15BA /* PlaybackEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B30114FBFB6C0BBC9DCB04 /* PlaybackEngine.swift */; };
 		67D55382F4421CF93A640C9C /* VLCKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8E54EE927FE36940740F4D /* VLCKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6C5A75896E95C3E4FB760F20 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F61665ECED186941F0DB54ED /* Sparkle.framework */; };
 		6C64C984D7367E8E74004E9A /* PlaybackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCA014DDC823FEB95C6EA13 /* PlaybackTests.swift */; };
 		6DD605104CC215CA516300F0 /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39B7836E9F1724E6C85436B /* WidgetSnapshot.swift */; };
 		7930A8DC4758DB29D2A9287A /* CameraBarCore in Frameworks */ = {isa = PBXBuildFile; productRef = F17E15668393380E9F28BAD1 /* CameraBarCore */; };
 		7A7D70E890C862D2969C2439 /* CameraState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2223F9052422DD03E178B88B /* CameraState.swift */; };
 		7E5706353F3BDB9D957D63E9 /* CredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34214794A3BE8AD443B33D /* CredentialStore.swift */; };
+		810C3A83EA3D0C9711E0CF14 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F61665ECED186941F0DB54ED /* Sparkle.framework */; };
 		81606835539195C61887AE4C /* VLCKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8E54EE927FE36940740F4D /* VLCKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8D7E59D5C70B7435C6817288 /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39B7836E9F1724E6C85436B /* WidgetSnapshot.swift */; };
 		9B1BAA7CC48B39E10C197B8F /* SnapshotBoundary.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8E946FD95FBC7359885831 /* SnapshotBoundary.m */; };
 		A136033D27A754650088AC2D /* CameraBarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D07559B7DCFD55D5A679A3 /* CameraBarApp.swift */; };
 		B5351FCA3D7807E5ACB438A8 /* CameraBarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0FBFC40E467761482B448B /* CameraBarUITests.swift */; };
+		B5D42B2ADF493DCD546715C8 /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F61665ECED186941F0DB54ED /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B61255BD7F9D8064E00C4729 /* THIRD_PARTY_NOTICES.txt in Resources */ = {isa = PBXBuildFile; fileRef = C2D45F80835C502E688DCC8A /* THIRD_PARTY_NOTICES.txt */; };
 		B6C85A3A5A444D7335438D9A /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19C94DE61CE26F80D9B8089 /* Views.swift */; };
 		BD628DAE375F93AB7D65861F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23C501CFB46F4C263E52AEF8 /* Assets.xcassets */; };
+		C6A21FD81D3B49F8D5B315AB /* UpdateAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3D119E55CDDFF1F33C37A /* UpdateAvailability.swift */; };
 		C9C6A45415EA781FE40C30D1 /* CameraBarWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2C7A6FDF00E9E946F972F4 /* CameraBarWidget.swift */; };
 		CB0BCD90DC951AA6FE01C6D6 /* CredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34214794A3BE8AD443B33D /* CredentialStore.swift */; };
 		CC2D6E54B5800B27A364B43F /* MonitorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE28803311DAF4F159BBB83 /* MonitorTheme.swift */; };
 		D70904C174FD7A7AF214E573 /* CameraBarCore in Frameworks */ = {isa = PBXBuildFile; productRef = A6FDA039BAD81F3C6945986B /* CameraBarCore */; };
 		D79C88A1C4120C9F6ED13F90 /* VLCKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8E54EE927FE36940740F4D /* VLCKit.xcframework */; };
+		DB9E4FFC9399B5A64E5D7E55 /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F61665ECED186941F0DB54ED /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E25DE5C7FA6C69A05DD35F89 /* VLCKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8E54EE927FE36940740F4D /* VLCKit.xcframework */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +73,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				81606835539195C61887AE4C /* VLCKit.xcframework in Embed Frameworks */,
+				B5D42B2ADF493DCD546715C8 /* Sparkle.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,6 +85,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				67D55382F4421CF93A640C9C /* VLCKit.xcframework in Embed Frameworks */,
+				DB9E4FFC9399B5A64E5D7E55 /* Sparkle.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,12 +125,14 @@
 		CE32066C05419EC21B9B5013 /* camera-bar */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "camera-bar"; path = .; sourceTree = SOURCE_ROOT; };
 		CE8E946FD95FBC7359885831 /* SnapshotBoundary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SnapshotBoundary.m; sourceTree = "<group>"; };
 		DD34214794A3BE8AD443B33D /* CredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialStore.swift; sourceTree = "<group>"; };
+		DEF3D119E55CDDFF1F33C37A /* UpdateAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateAvailability.swift; sourceTree = "<group>"; };
 		E2FA7ABD716DC63BC1CEBFA3 /* CameraBar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CameraBar.entitlements; sourceTree = "<group>"; };
 		E39B7836E9F1724E6C85436B /* WidgetSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSnapshot.swift; sourceTree = "<group>"; };
 		EE6163E9394ED1B671C3962E /* CameraBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFCA014DDC823FEB95C6EA13 /* PlaybackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackTests.swift; sourceTree = "<group>"; };
 		EFE89110586AEB4E77005AC5 /* CameraBarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CameraBarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F19C94DE61CE26F80D9B8089 /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
+		F61665ECED186941F0DB54ED /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Vendor/Sparkle/Sparkle.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +150,7 @@
 			files = (
 				424C746E848DD361A36E0F61 /* CameraBarCore in Frameworks */,
 				E25DE5C7FA6C69A05DD35F89 /* VLCKit.xcframework in Frameworks */,
+				6C5A75896E95C3E4FB760F20 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +168,7 @@
 			files = (
 				2633B3B1FD991A7B04FBBB90 /* CameraBarCore in Frameworks */,
 				D79C88A1C4120C9F6ED13F90 /* VLCKit.xcframework in Frameworks */,
+				810C3A83EA3D0C9711E0CF14 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +195,7 @@
 		551CAC6EB610863787248BE5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F61665ECED186941F0DB54ED /* Sparkle.framework */,
 				8C8E54EE927FE36940740F4D /* VLCKit.xcframework */,
 			);
 			name = Frameworks;
@@ -244,6 +257,7 @@
 				12B30114FBFB6C0BBC9DCB04 /* PlaybackEngine.swift */,
 				928B317AC702EF56790DC92A /* SnapshotBoundary.h */,
 				CE8E946FD95FBC7359885831 /* SnapshotBoundary.m */,
+				DEF3D119E55CDDFF1F33C37A /* UpdateAvailability.swift */,
 				F19C94DE61CE26F80D9B8089 /* Views.swift */,
 			);
 			path = CameraBar;
@@ -436,6 +450,7 @@
 				04B160F2E04180E42752B82E /* MonitorTheme.swift in Sources */,
 				4FEC4B3988F521E8C7D3B816 /* PlaybackEngine.swift in Sources */,
 				57504DDDF2AE4107DC358025 /* SnapshotBoundary.m in Sources */,
+				C6A21FD81D3B49F8D5B315AB /* UpdateAvailability.swift in Sources */,
 				B6C85A3A5A444D7335438D9A /* Views.swift in Sources */,
 				8D7E59D5C70B7435C6817288 /* WidgetSnapshot.swift in Sources */,
 			);
@@ -453,6 +468,7 @@
 				6C64C984D7367E8E74004E9A /* PlaybackTests.swift in Sources */,
 				315E167283B9920267EBE85D /* ServiceTests.swift in Sources */,
 				9B1BAA7CC48B39E10C197B8F /* SnapshotBoundary.m in Sources */,
+				06909E03D75767D337638FE9 /* UpdateAvailability.swift in Sources */,
 				3F04836C4E31A175434BDFDE /* WidgetSnapshot.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -523,7 +539,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -541,6 +557,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"Vendor/Sparkle\"",
 					"\"Vendor/VLCKit - binary package\"",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
@@ -646,7 +663,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -666,6 +683,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"Vendor/Sparkle\"",
 					"\"Vendor/VLCKit - binary package\"",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -704,6 +722,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"Vendor/Sparkle\"",
 					"\"Vendor/VLCKit - binary package\"",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
@@ -727,6 +746,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"Vendor/Sparkle\"",
 					"\"Vendor/VLCKit - binary package\"",
 				);
 				HEADER_SEARCH_PATHS = (

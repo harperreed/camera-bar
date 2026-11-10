@@ -1,5 +1,5 @@
 // ABOUTME: Builds, notarizes, and packages the universal Developer ID release.
-// ABOUTME: Writes only the stapled ZIP and checksum to the release artifact directory.
+// ABOUTME: Packages the stapled ZIP, checksum, and signed Sparkle appcast for publication.
 import CryptoKit
 import Foundation
 import Security
@@ -37,6 +37,15 @@ struct ReleaseMain {
           "MARKETING_VERSION=\(options.version)", "CURRENT_PROJECT_VERSION=\(options.build)",
           "build",
         ], log: ".build/release-build.log")
+      try signSparkleFramework(
+        app + "/Contents/Frameworks/Sparkle.framework", identity: secret["APPLE_SIGNING_IDENTITY"]!,
+        keychain: path, log: ".build/release-sparkle-signature")
+      try run(
+        "/usr/bin/codesign",
+        [
+          "--force", "--sign", secret["APPLE_SIGNING_IDENTITY"]!, "--keychain", path,
+          "--timestamp", "--options", "runtime", "--preserve-metadata=entitlements", app,
+        ], log: ".build/release-app-resign.log")
     }
     try run(
       "/usr/bin/codesign", ["--verify", "--deep", "--strict", "--verbose=2", app],
@@ -141,6 +150,9 @@ struct ReleaseMain {
       String(format: "%02x", $0)
     }.joined()
     try "\(digest)  \(name)\n".write(toFile: zip + ".sha256", atomically: true, encoding: .utf8)
+    try generateSignedAppcast(
+      archives: output, version: options.version,
+      privateKey: secret["SPARKLE_PRIVATE_KEY"]!, logPrefix: ".build/release-appcast")
     print("Notarized release ready: \(zip)")
   }
 }

@@ -2,6 +2,7 @@
 // ABOUTME: Keeps addresses in secure fields and all selection in CameraState.
 import AppKit
 import CameraBarCore
+import Sparkle
 import SwiftUI
 
 struct ViewerRoot: View {
@@ -133,20 +134,40 @@ struct VideoSurface: NSViewRepresentable {
 
 struct SettingsRoot: View {
   @ObservedObject var controller: AppController
+  let updater: SPUUpdater
   var body: some View {
     Group {
       if let state = controller.state {
-        CameraSettings(controller: controller, state: state)
+        CameraSettings(controller: controller, state: state, updater: updater)
       } else {
-        Text(controller.error ?? "Camera settings unavailable").padding()
+        VStack {
+          Text(controller.error ?? "Camera settings unavailable")
+          CheckForUpdatesButton(updater: updater)
+        }.padding()
       }
     }.preferredColorScheme(.dark)
+  }
+}
+
+struct CheckForUpdatesButton: View {
+  let updater: SPUUpdater
+  @StateObject private var availability: UpdateAvailability
+
+  init(updater: SPUUpdater) {
+    self.updater = updater
+    _availability = StateObject(wrappedValue: UpdateAvailability(updater: updater))
+  }
+
+  var body: some View {
+    Button("Check for Updates…", action: updater.checkForUpdates)
+      .disabled(!availability.canCheckForUpdates)
   }
 }
 
 struct CameraSettings: View {
   @ObservedObject var controller: AppController
   @ObservedObject var state: CameraState
+  let updater: SPUUpdater
   @State private var editor: CameraEditorModel?
   @State private var removing: Camera?
 
@@ -214,6 +235,7 @@ struct CameraSettings: View {
         Text("Addresses stay in Keychain.\nKeep Camera Bar running for widget updates.")
           .font(.caption).foregroundStyle(.secondary)
         Spacer()
+        CheckForUpdatesButton(updater: updater)
         Button("Show viewer", action: controller.showViewer)
       }
     }.padding(24).frame(width: 600, height: 440)

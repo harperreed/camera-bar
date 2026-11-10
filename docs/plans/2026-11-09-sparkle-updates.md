@@ -20,7 +20,10 @@
 
 ## Status
 
-- v1.0.1 points to 08508b9; GitHub run 42741839447 passed checks, signing/notarization and publication. Downloaded artifact verification in progress.
+- v1.0.1 points to 08508b9; GitHub run 42741839447 passed checks, signing/notarization and publication. Independently downloaded build 12 passed checksum, strict signatures, stapled-ticket and Gatekeeper checks; icon metadata is present and anonymous download works. Design PR #1 merged into the default branch at cbabd0a.
 - Work branch feat/sparkle-updates; no worktree.
 - Key generated in Keychain; SPARKLE_PRIVATE_KEY secret uploaded and its name verified. Private export was deleted automatically with its protected temporary directory.
 - Compaction count: 0.
+- Sparkle implementation and spec review complete. Focused real cryptographic tamper checks, native SPUUpdater startup/availability test, local build/signatures, shell and workflow checks passed. Full UI/canonical checks and hosted notarization are next.
+- Quality review approved after setting signed-feed failure expiry to zero, with a red/green configuration test. UI automation approval succeeded; a failing real run exposed LaunchServices routing to the installed app. Tests now explicitly target the built app on warm/cold URL launches. The full lifecycle then passed and actual viewer/settings/editor/error screenshots were visually inspected. Final canonical checks are running.
+- Final scripts/check passed on 2026-11-09: 18 core tests, 15 native/RTSP tests, one real UI lifecycle, release signing/tampering tests, lint, shell/workflow checks, build and strict signatures. Existing vendor/Xcode/media-system diagnostics remain. Next: hosted signing/notarization, publication and real published-feed probe; actual updater replacement/install is not yet verified.

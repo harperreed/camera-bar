@@ -2,10 +2,42 @@
 // ABOUTME: Uses disposable identifiers so tests never touch saved user cameras.
 import AppKit
 import CameraBarCore
+import Sparkle
 import XCTest
 
 @MainActor
 final class ServiceTests: XCTestCase {
+  func testUpdateAvailabilityTracksRealSparkleStartup() throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let contents = directory.appendingPathComponent("Fixture.app/Contents")
+    try FileManager.default.createDirectory(at: contents, withIntermediateDirectories: true)
+    let identifier = "com.harper.camera-bar.update-tests.\(UUID().uuidString)"
+    let source = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+      .deletingLastPathComponent().appendingPathComponent("CameraBar/Info.plist")
+    var info =
+      try PropertyListSerialization.propertyList(from: Data(contentsOf: source), format: nil)
+      as! [String: Any]
+    info["CFBundleIdentifier"] = identifier
+    info["CFBundleVersion"] = "1"
+    info["CFBundleShortVersionString"] = "1.1.0"
+    info["CFBundleName"] = "Updater Test"
+    info["SUEnableAutomaticChecks"] = false
+    try PropertyListSerialization.data(fromPropertyList: info, format: .xml, options: 0)
+      .write(to: contents.appendingPathComponent("Info.plist"))
+    defer { UserDefaults.standard.removePersistentDomain(forName: identifier) }
+    let bundle = try XCTUnwrap(Bundle(url: contents.deletingLastPathComponent()))
+    let driver = SPUStandardUserDriver(hostBundle: bundle, delegate: nil)
+    let updater = SPUUpdater(
+      hostBundle: bundle, applicationBundle: bundle, userDriver: driver, delegate: nil)
+    let availability = UpdateAvailability(updater: updater)
+    XCTAssertFalse(availability.canCheckForUpdates)
+    try updater.start()
+    XCTAssertTrue(updater.canCheckForUpdates)
+    XCTAssertTrue(availability.canCheckForUpdates)
+    XCTAssertEqual(updater.feedURL?.absoluteString, info["SUFeedURL"] as? String)
+  }
+
   func testKeychainRoundTripAndDeletion() throws {
     let store = CredentialStore(service: "CameraBarTests.\(UUID())")
     let id = UUID()
